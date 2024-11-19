@@ -17,13 +17,13 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1">Base Salary (60% of OTE)</label>
-                    <input type="number" id="base-salary" class="w-full border rounded p-2 bg-gray-50" value="90000" readonly>
+                    <input type="number" id="base-salary" class="w-full border rounded p-2 bg-gray-100 cursor-not-allowed" value="90000" readonly>
                 </div>
                 <div class="col-span-2">
                     <div class="grid grid-cols-2 gap-4 text-sm text-gray-600">
-                        <div>Variable Compensation: $<span id="variable">60000</span></div>
+                        <div>Annual Variable: $<span id="variable">60000</span></div>
+                        <div>Quarterly Variable: $<span id="quarterly-variable">15000</span></div>
                         <div>Base Commission Rate: <span id="comm-rate">9.0</span>%</div>
-                        <div>Q1 Ramp Target: $<span id="ramp-target">30000</span></div>
                         <div>Accelerator Rate: <span id="acc-rate">13.5</span>%</div>
                     </div>
                 </div>
@@ -41,11 +41,11 @@
                     </div>
                     <div class="grid grid-cols-2 gap-2">
                         <div>
-                            <label class="block text-sm font-medium mb-1">Q1 Ramp</label>
+                            <label class="block text-sm font-medium mb-1">Include Q1 Ramp</label>
                             <input type="checkbox" id="what-if-ramp" class="mt-2" checked>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium mb-1">CS Bonus</label>
+                            <label class="block text-sm font-medium mb-1">Include CS Bonus</label>
                             <input type="checkbox" id="what-if-cs" class="mt-2" checked>
                         </div>
                     </div>
@@ -55,89 +55,86 @@
                     <div class="grid grid-cols-2 gap-2 text-sm">
                         <div>Base Salary:</div>
                         <div>$<span id="what-if-base">90,000</span></div>
-                        <div>Q1 Ramp:</div>
-                        <div>$<span id="what-if-ramp-amount">30,000</span></div>
+                        <div>Q1 Ramp (if achieved):</div>
+                        <div>$<span id="what-if-ramp-amount">7,500</span></div>
                         <div>ACV Commission:</div>
                         <div>$<span id="what-if-acv">45,000</span></div>
-                        <div>CS Bonus:</div>
+                        <div>CS Bonus (if achieved):</div>
                         <div>$<span id="what-if-cs-amount">15,000</span></div>
-                        <div class="font-bold">Total Earnings:</div>
-                        <div class="font-bold">$<span id="what-if-total">180,000</span></div>
+                        <div class="font-bold">Total Potential Earnings:</div>
+                        <div class="font-bold">$<span id="what-if-total">150,000</span></div>
                     </div>
-                </div>
-                <div class="mt-4">
-                    <canvas id="earnings-chart" height="200"></canvas>
                 </div>
             </div>
         </div>
 
         <!-- Q1 Ramp Period -->
         <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-xl font-bold mb-4">Q1 Ramp Period</h2>
+            <h2 class="text-xl font-bold mb-4">Q1 Ramp Period (50% of Q1 Variable)</h2>
             <div class="grid gap-4">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium mb-1">Month 1 Discovery Meetings (Target: 6)</label>
-                        <input type="number" id="m1-meetings" class="w-full border rounded p-2" value="0">
+                        <input type="number" id="m1-meetings" class="w-full border rounded p-2" value="0" min="0">
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-1">Pipeline (Target: $0)</label>
-                        <input type="number" id="m1-pipeline" class="w-full border rounded p-2" value="0">
+                        <input type="number" id="m1-pipeline" class="w-full border rounded p-2" value="0" min="0">
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium mb-1">Month 2 Discovery Meetings (Target: 8)</label>
-                        <input type="number" id="m2-meetings" class="w-full border rounded p-2" value="0">
+                        <input type="number" id="m2-meetings" class="w-full border rounded p-2" value="0" min="0">
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-1">Pipeline (Target: $100,000)</label>
-                        <input type="number" id="m2-pipeline" class="w-full border rounded p-2" value="0">
+                        <input type="number" id="m2-pipeline" class="w-full border rounded p-2" value="0" min="0">
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium mb-1">Month 3 Discovery Meetings (Target: 10)</label>
-                        <input type="number" id="m3-meetings" class="w-full border rounded p-2" value="0">
+                        <input type="number" id="m3-meetings" class="w-full border rounded p-2" value="0" min="0">
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-1">Pipeline (Target: $200,000)</label>
-                        <input type="number" id="m3-pipeline" class="w-full border rounded p-2" value="0">
+                        <input type="number" id="m3-pipeline" class="w-full border rounded p-2" value="0" min="0">
                     </div>
                 </div>
                 <div class="mt-2 text-sm">
                     <div>Activity Achievement: <span id="activity-achievement">0</span>%</div>
                     <div>Pipeline Achievement: <span id="pipeline-achievement">0</span>%</div>
-                    <div>Q1 Ramp Commission: <span id="ramp-comm">$0</span></div>
+                    <div>Q1 Ramp Commission: $<span id="ramp-comm">0</span></div>
                 </div>
             </div>
         </div>
 
         <!-- ACV Targets -->
         <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-xl font-bold mb-4">ACV Targets (75% of Variable)</h2>
+            <h2 class="text-xl font-bold mb-4">ACV Targets</h2>
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium mb-1">Q2 Actual (Target: $125,000)</label>
-                    <input type="number" id="q2-actual" class="w-full border rounded p-2" value="0">
-                    <div class="text-sm mt-1">Commission: <span id="q2-comm">$0</span></div>
+                    <input type="number" id="q2-actual" class="w-full border rounded p-2" value="0" min="0">
+                    <div class="text-sm mt-1">Commission: $<span id="q2-comm">0</span></div>
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1">Q3 Actual (Target: $175,000)</label>
-                    <input type="number" id="q3-actual" class="w-full border rounded p-2" value="0">
-                    <div class="text-sm mt-1">Commission: <span id="q3-comm">$0</span></div>
+                    <input type="number" id="q3-actual" class="w-full border rounded p-2" value="0" min="0">
+                    <div class="text-sm mt-1">Commission: $<span id="q3-comm">0</span></div>
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1">Q4 Actual (Target: $200,000)</label>
-                    <input type="number" id="q4-actual" class="w-full border rounded p-2" value="0">
-                    <div class="text-sm mt-1">Commission: <span id="q4-comm">$0</span></div>
+                    <input type="number" id="q4-actual" class="w-full border rounded p-2" value="0" min="0">
+                    <div class="text-sm mt-1">Commission: $<span id="q4-comm">0</span></div>
                 </div>
             </div>
         </div>
 
         <!-- Customer Success -->
         <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-xl font-bold mb-4">Annual Customer Success Bonus (25% of Variable)</h2>
+            <h2 class="text-xl font-bold mb-4">Annual Customer Success Bonus</h2>
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium mb-1">Implementation Completion %</label>
@@ -148,55 +145,74 @@
                     <input type="number" id="cs-usage" class="w-full border rounded p-2" value="0" min="0" max="100">
                 </div>
                 <div class="col-span-2">
-                    <div class="text-sm mt-1">CS Bonus (if both targets met): <span id="cs-bonus">$0</span></div>
+                    <div class="text-sm mt-1">CS Bonus (if both targets met): $<span id="cs-bonus">0</span></div>
                 </div>
             </div>
         </div>
 
         <!-- Total Compensation -->
         <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-xl font-bold mb-4">Total Compensation</h2>
+            <h2 class="text-xl font-bold mb-4">Current Total Compensation</h2>
             <div class="text-3xl font-bold" id="total-comp">$90,000</div>
             <div class="mt-4 space-y-2 text-sm">
-                <div>Base Salary: <span id="base-display">$90,000</span></div>
-                <div>Q1 Ramp: <span id="ramp-total">$0</span></div>
-                <div>ACV Commission: <span id="acv-total">$0</span></div>
-                <div>CS Bonus: <span id="cs-total">$0</span></div>
+                <div>Base Salary: $<span id="base-display">90,000</span></div>
+                <div>Q1 Ramp: $<span id="ramp-total">0</span></div>
+                <div>ACV Commission: $<span id="acv-total">0</span></div>
+                <div>CS Bonus: $<span id="cs-total">0</span></div>
             </div>
         </div>
     </div>
 
     <script>
-        let earningsChart = null;
+        // Initialize all calculations when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateAll();
+        });
+
+        // Add event listeners to all inputs
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', calculateAll);
+            input.addEventListener('change', calculateAll);
+        });
+
+        function calculateAll() {
+            updateOTEBasedValues();
+            calculateRampCommission();
+            calculateACVCommissions();
+            calculateCSBonus();
+            updateWhatIfCalculator();
+            updateTotalCompensation();
+        }
 
         function updateOTEBasedValues() {
             const ote = Number(document.getElementById('ote').value);
             const baseSalary = ote * 0.6;
             const variable = ote * 0.4;
+            const quarterlyVariable = variable / 4;
             const baseCommRate = ((variable * 0.75) / 500000) * 100;
             const accRate = baseCommRate * 1.5;
 
             document.getElementById('base-salary').value = baseSalary;
             document.getElementById('variable').textContent = variable.toLocaleString();
+            document.getElementById('quarterly-variable').textContent = quarterlyVariable.toLocaleString();
             document.getElementById('comm-rate').textContent = baseCommRate.toFixed(1);
             document.getElementById('acc-rate').textContent = accRate.toFixed(1);
-            document.getElementById('ramp-target').textContent = (variable * 0.5).toLocaleString();
         }
 
         function calculateRampCommission() {
             const ote = Number(document.getElementById('ote').value);
-            const variable = ote * 0.4;
-            const rampTarget = variable * 0.5;
+            const quarterlyVariable = (ote * 0.4) / 4;
+            const rampTarget = quarterlyVariable * 0.5;
             
             // Activity achievement
-            const m1MeetingsAch = Number(document.getElementById('m1-meetings').value) / 6;
-            const m2MeetingsAch = Number(document.getElementById('m2-meetings').value) / 8;
-            const m3MeetingsAch = Number(document.getElementById('m3-meetings').value) / 10;
+            const m1MeetingsAch = Math.min(Number(document.getElementById('m1-meetings').value) / 6, 1);
+            const m2MeetingsAch = Math.min(Number(document.getElementById('m2-meetings').value) / 8, 1);
+            const m3MeetingsAch = Math.min(Number(document.getElementById('m3-meetings').value) / 10, 1);
             const activityAch = ((m1MeetingsAch + m2MeetingsAch + m3MeetingsAch) / 3) * 100;
             
             // Pipeline achievement
-            const m2PipelineAch = Number(document.getElementById('m2-pipeline').value) / 100000;
-            const m3PipelineAch = Number(document.getElementById('m3-pipeline').value) / 200000;
+            const m2PipelineAch = Math.min(Number(document.getElementById('m2-pipeline').value) / 100000, 1);
+            const m3PipelineAch = Math.min(Number(document.getElementById('m3-pipeline').value) / 200000, 1);
             const pipelineAch = ((m2PipelineAch + m3PipelineAch) / 2) * 100;
             
             document.getElementById('activity-achievement').textContent = activityAch.toFixed(1);
@@ -205,54 +221,37 @@
             // Calculate payout
             const activityPayout = (rampTarget * 0.5) * (activityAch / 100);
             const pipelinePayout = (rampTarget * 0.5) * (pipelineAch / 100);
-            return activityPayout + pipelinePayout;
+            const totalRampPayout = activityPayout + pipelinePayout;
+            
+            document.getElementById('ramp-comm').textContent = Math.round(totalRampPayout).toLocaleString();
+            document.getElementById('ramp-total').textContent = Math.round(totalRampPayout).toLocaleString();
+            
+            return totalRampPayout;
         }
 
-        function calculateACVCommission(actual, target) {
+        function calculateACVCommissions() {
             const baseCommRate = Number(document.getElementById('comm-rate').textContent) / 100;
             const accRate = Number(document.getElementById('acc-rate').textContent) / 100;
             
-            if (actual <= target) {
-                return actual * baseCommRate;
-            }
-            return (target * baseCommRate) + ((actual - target) * accRate);
-        }
-
-        function calculateCSBonus() {
-            const impl = Number(document.getElementById('cs-impl').value);
-            const usage = Number(document.getElementById('cs-usage').value);
-            const ote = Number(document.getElementById('ote').value);
-            const variable = ote * 0.4;
+            const q2Target = 125000;
+            const q3Target = 175000;
+            const q4Target = 200000;
             
-            return (impl >= 100 && usage >= 75) ? variable * 0.25 : 0;
-        }
-
-        function updateWhatIfCalculator() {
-            const ote = Number(document.getElementById('ote').value);
-            const baseSalary = ote * 0.6;
-            const bookings = Number(document.getElementById('what-if-bookings').value);
-            const includeRamp = document.getElementById('what-if-ramp').checked;
-            const includeCS = document.getElementById('what-if-cs').checked;
+            const q2Actual = Number(document.getElementById('q2-actual').value);
+            const q3Actual = Number(document.getElementById('q3-actual').value);
+            const q4Actual = Number(document.getElementById('q4-actual').value);
             
-            const baseCommRate = Number(document.getElementById('comm-rate').textContent) / 100;
-            const accRate = Number(document.getElementById('acc-rate').textContent) / 100;
-            
-            // Calculate ACV commission
-            let acvComm = 0;
-            if (bookings <= 500000) {
-                acvComm = bookings * baseCommRate;
-            } else {
-                acvComm = (500000 * baseCommRate) + ((bookings - 500000) * accRate);
+            function calculateQuarterlyComm(actual, target) {
+                if (actual <= target) {
+                    return actual * baseCommRate;
+                }
+                return (target * baseCommRate) + ((actual - target) * accRate);
             }
             
-            // Calculate total
-            const rampAmount = includeRamp ? (ote * 0.4 * 0.5) : 0;
-            const csAmount = includeCS ? (ote * 0.4 * 0.25) : 0;
-            const total = baseSalary + rampAmount + acvComm + csAmount;
+            const q2Comm = calculateQuarterlyComm(q2Actual, q2Target);
+            const q3Comm = calculateQuarterlyComm(q3Actual, q3Target);
+            const q4Comm = calculateQuarterlyComm(q4Actual, q4Target);
             
-            // Update display
-            document.getElementById('what-if-base').textContent = baseSalary.toLocaleString();
-            document.getElementById('what-if-ramp-amount').textContent = rampAmount.toLocaleString();
-            document.getElementById('what-if-acv').textContent = Math.round(acvComm).toLocaleString();
-            document.getElementById('what-if-cs-amount').textContent = csAmount.toLocaleString();
-            document.getElementById('what-if-total').
+            document.getElementById('q2-comm').textContent = Math.round(q2Comm).toLocaleString();
+            document.getElementById('q3-comm').textContent = Math.round(q3Comm).toLocaleString();
+            document.getElementById('q4-comm').textContent = Math.round(q4
