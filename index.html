@@ -6,74 +6,130 @@
 </head>
 <body class="bg-gray-100 p-6">
     <div class="max-w-4xl mx-auto space-y-6">
-        <!-- OTE Section -->
+        <!-- Previous sections remain the same -->
+
+        <!-- Q1 Ramp Period -->
         <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-xl font-bold mb-4">Compensation Structure</h2>
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium mb-1">Annual OTE ($)</label>
-                    <input type="number" id="ote" class="w-full border rounded p-2" value="150000" step="5000">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">Base Salary (60% of OTE)</label>
-                    <input type="number" id="base-salary" class="w-full border rounded p-2 bg-gray-100" readonly>
-                </div>
-                <div class="col-span-2">
-                    <div class="grid grid-cols-2 gap-4 text-sm text-gray-600">
-                        <div>Annual Variable: $<span id="variable">60000</span></div>
-                        <div>Quarterly Variable: $<span id="quarterly-variable">15000</span></div>
-                        <div>Base Commission Rate: <span id="comm-rate">9.0</span>%</div>
-                        <div>Accelerator Rate: <span id="acc-rate">13.5</span>%</div>
+            <h2 class="text-xl font-bold mb-4">Q1 Ramp Period</h2>
+            <div class="grid gap-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Month 1 Discovery Meetings (Target: 6)</label>
+                        <input type="number" id="m1-meetings" class="w-full border rounded p-2" value="0" min="0">
                     </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Pipeline (Target: $0)</label>
+                        <input type="number" id="m1-pipeline" class="w-full border rounded p-2" value="0" min="0">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Month 2 Discovery Meetings (Target: 8)</label>
+                        <input type="number" id="m2-meetings" class="w-full border rounded p-2" value="0" min="0">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Pipeline (Target: $100,000)</label>
+                        <input type="number" id="m2-pipeline" class="w-full border rounded p-2" value="0" min="0">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Month 3 Discovery Meetings (Target: 10)</label>
+                        <input type="number" id="m3-meetings" class="w-full border rounded p-2" value="0" min="0">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Pipeline (Target: $200,000)</label>
+                        <input type="number" id="m3-pipeline" class="w-full border rounded p-2" value="0" min="0">
+                    </div>
+                </div>
+                <div class="mt-2 text-sm">
+                    <div>Activity Achievement: <span id="activity-achievement">0</span>%</div>
+                    <div>Pipeline Achievement: <span id="pipeline-achievement">0</span>%</div>
+                    <div>Q1 Ramp Commission: $<span id="ramp-comm">0</span></div>
                 </div>
             </div>
         </div>
 
-        <!-- What-If Calculator -->
+        <!-- ACV Targets -->
         <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-xl font-bold mb-4">Earnings Calculator</h2>
-            <div class="grid gap-4">
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Annual Bookings Target ($)</label>
-                        <input type="number" id="what-if-bookings" class="w-full border rounded p-2" value="500000" step="50000">
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Include Q1 Ramp</label>
-                            <input type="checkbox" id="what-if-ramp" checked>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Include CS Bonus</label>
-                            <input type="checkbox" id="what-if-cs" checked>
-                        </div>
-                    </div>
+            <h2 class="text-xl font-bold mb-4">ACV Targets</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Q2 Actual (Target: $125,000)</label>
+                    <input type="number" id="q2-actual" class="w-full border rounded p-2" value="0" min="0">
+                    <div class="text-sm mt-1">Commission: $<span id="q2-comm">0</span></div>
                 </div>
-                <div class="mt-4 p-4 bg-gray-50 rounded">
-                    <h3 class="font-bold mb-2">Potential Earnings Breakdown:</h3>
-                    <div class="grid grid-cols-2 gap-2 text-sm">
-                        <div>Base Salary:</div>
-                        <div>$<span id="what-if-base">90,000</span></div>
-                        <div>Q1 Ramp (if achieved):</div>
-                        <div>$<span id="what-if-ramp-amount">7,500</span></div>
-                        <div>ACV Commission:</div>
-                        <div>$<span id="what-if-acv">45,000</span></div>
-                        <div>CS Bonus (if achieved):</div>
-                        <div>$<span id="what-if-cs-amount">15,000</span></div>
-                        <div class="font-bold">Total Potential Earnings:</div>
-                        <div class="font-bold">$<span id="what-if-total">157,500</span></div>
-                    </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Q3 Actual (Target: $175,000)</label>
+                    <input type="number" id="q3-actual" class="w-full border rounded p-2" value="0" min="0">
+                    <div class="text-sm mt-1">Commission: $<span id="q3-comm">0</span></div>
                 </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Q4 Actual (Target: $200,000)</label>
+                    <input type="number" id="q4-actual" class="w-full border rounded p-2" value="0" min="0">
+                    <div class="text-sm mt-1">Commission: $<span id="q4-comm">0</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer Success -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-bold mb-4">Annual Customer Success Bonus</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Implementation Completion %</label>
+                    <input type="number" id="cs-impl" class="w-full border rounded p-2" value="0" min="0" max="100">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Feature Usage %</label>
+                    <input type="number" id="cs-usage" class="w-full border rounded p-2" value="0" min="0" max="100">
+                </div>
+                <div class="col-span-2">
+                    <div class="text-sm mt-1">CS Bonus (if both targets met): $<span id="cs-bonus">0</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Compensation -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-bold mb-4">Current Total Compensation</h2>
+            <div class="text-3xl font-bold" id="total-comp">$90,000</div>
+            <div class="mt-4 space-y-2 text-sm">
+                <div>Base Salary: $<span id="base-display">90,000</span></div>
+                <div>Q1 Ramp: $<span id="ramp-total">0</span></div>
+                <div>ACV Commission: $<span id="acv-total">0</span></div>
+                <div>CS Bonus: $<span id="cs-total">0</span></div>
             </div>
         </div>
     </div>
 
     <script>
         // Add event listeners
-        document.getElementById('ote').addEventListener('input', updateAll);
-        document.getElementById('what-if-bookings').addEventListener('input', updateAll);
-        document.getElementById('what-if-ramp').addEventListener('change', updateAll);
-        document.getElementById('what-if-cs').addEventListener('change', updateAll);
+        document.addEventListener('DOMContentLoaded', function() {
+            // Previous event listeners
+            document.getElementById('ote').addEventListener('input', updateAll);
+            document.getElementById('what-if-bookings').addEventListener('input', updateAll);
+            document.getElementById('what-if-ramp').addEventListener('change', updateAll);
+            document.getElementById('what-if-cs').addEventListener('change', updateAll);
+
+            // Q1 Ramp inputs
+            ['m1-meetings', 'm2-meetings', 'm3-meetings', 
+             'm1-pipeline', 'm2-pipeline', 'm3-pipeline'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updateAll);
+            });
+
+            // ACV inputs
+            ['q2-actual', 'q3-actual', 'q4-actual'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updateAll);
+            });
+
+            // CS inputs
+            ['cs-impl', 'cs-usage'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updateAll);
+            });
+
+            updateAll();
+        });
 
         function updateAll() {
             const ote = Number(document.getElementById('ote').value);
@@ -92,15 +148,31 @@
             document.getElementById('acc-rate').textContent = accRate.toFixed(1);
 
             // Update What-If Calculator
+            updateWhatIf(baseSalary, variable, quarterlyVariable, baseCommRate, accRate);
+
+            // Update Q1 Ramp
+            updateRampCalculations(quarterlyVariable);
+
+            // Update ACV
+            updateACVCalculations(baseCommRate, accRate);
+
+            // Update CS
+            updateCSCalculations(variable);
+
+            // Update Total Compensation
+            updateTotalCompensation(baseSalary);
+        }
+
+        function updateWhatIf(baseSalary, variable, quarterlyVariable, baseCommRate, accRate) {
             const bookings = Number(document.getElementById('what-if-bookings').value);
             const includeRamp = document.getElementById('what-if-ramp').checked;
             const includeCS = document.getElementById('what-if-cs').checked;
 
             let acvComm = 0;
             if (bookings <= 500000) {
-                acvComm = bookings * (baseCommRate / 100);
+                acvComm = bookings * baseCommRate / 100;
             } else {
-                acvComm = (500000 * (baseCommRate / 100)) + ((bookings - 500000) * (accRate / 100));
+                acvComm = (500000 * baseCommRate / 100) + ((bookings - 500000) * accRate / 100);
             }
 
             const rampAmount = includeRamp ? (quarterlyVariable * 0.5) : 0;
@@ -115,8 +187,66 @@
             document.getElementById('what-if-total').textContent = Math.round(total).toLocaleString();
         }
 
-        // Initialize on load
-        document.addEventListener('DOMContentLoaded', updateAll);
+        function updateRampCalculations(quarterlyVariable) {
+            const m1MeetingsAch = Math.min(Number(document.getElementById('m1-meetings').value) / 6, 1);
+            const m2MeetingsAch = Math.min(Number(document.getElementById('m2-meetings').value) / 8, 1);
+            const m3MeetingsAch = Math.min(Number(document.getElementById('m3-meetings').value) / 10, 1);
+            const activityAch = ((m1MeetingsAch + m2MeetingsAch + m3MeetingsAch) / 3) * 100;
+
+            const m2PipelineAch = Math.min(Number(document.getElementById('m2-pipeline').value) / 100000, 1);
+            const m3PipelineAch = Math.min(Number(document.getElementById('m3-pipeline').value) / 200000, 1);
+            const pipelineAch = ((m2PipelineAch + m3PipelineAch) / 2) * 100;
+
+            document.getElementById('activity-achievement').textContent = activityAch.toFixed(1);
+            document.getElementById('pipeline-achievement').textContent = pipelineAch.toFixed(1);
+
+            const rampTarget = quarterlyVariable * 0.5;
+            const activityPayout = (rampTarget * 0.5) * (activityAch / 100);
+            const pipelinePayout = (rampTarget * 0.5) * (pipelineAch / 100);
+            const totalRampPayout = activityPayout + pipelinePayout;
+
+            document.getElementById('ramp-comm').textContent = Math.round(totalRampPayout).toLocaleString();
+            document.getElementById('ramp-total').textContent = Math.round(totalRampPayout).toLocaleString();
+        }
+
+        function updateACVCalculations(baseCommRate, accRate) {
+            const targets = {q2: 125000, q3: 175000, q4: 200000};
+            let totalCommission = 0;
+
+            Object.keys(targets).forEach(quarter => {
+                const actual = Number(document.getElementById(`${quarter}-actual`).value);
+                let commission = 0;
+                if (actual <= targets[quarter]) {
+                    commission = actual * (baseCommRate / 100);
+                } else {
+                    commission = (targets[quarter] * (baseCommRate / 100)) + 
+                               ((actual - targets[quarter]) * (accRate / 100));
+                }
+                document.getElementById(`${quarter}-comm`).textContent = Math.round(commission).toLocaleString();
+                totalCommission += commission;
+            });
+
+            document.getElementById('acv-total').textContent = Math.round(totalCommission).toLocaleString();
+        }
+
+        function updateCSCalculations(variable) {
+            const impl = Number(document.getElementById('cs-impl').value);
+            const usage = Number(document.getElementById('cs-usage').value);
+            const csBonus = (impl >= 100 && usage >= 75) ? variable * 0.25 : 0;
+
+            document.getElementById('cs-bonus').textContent = Math.round(csBonus).toLocaleString();
+            document.getElementById('cs-total').textContent = Math.round(csBonus).toLocaleString();
+        }
+
+        function updateTotalCompensation(baseSalary) {
+            const rampTotal = Number(document.getElementById('ramp-total').textContent.replace(/,/g, ''));
+            const acvTotal = Number(document.getElementById('acv-total').textContent.replace(/,/g, ''));
+            const csTotal = Number(document.getElementById('cs-total').textContent.replace(/,/g, ''));
+
+            const total = baseSalary + rampTotal + acvTotal + csTotal;
+            document.getElementById('total-comp').textContent = '$' + Math.round(total).toLocaleString();
+            document.getElementById('base-display').textContent = baseSalary.toLocaleString();
+        }
     </script>
 </body>
 </html>
