@@ -4,32 +4,33 @@
     <title>Earnings Calculator & ACV Goals</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
-        .center-text { text-align: center; }
-        .brand-name { font-weight: bold; color: purple; }
+        .center-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
     </style>
 </head>
 <body class="bg-gray-100 p-6">
     <div class="max-w-4xl mx-auto space-y-6">
         <!-- Compensation Structure Section -->
-        <div class="bg-white rounded-lg shadow p-6">
+        <div class="bg-white rounded-lg shadow p-6 center-content">
             <h2 class="text-xl font-bold mb-4">Compensation Structure</h2>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-2 gap-4 w-full">
                 <div>
-                    <label class="block text-sm font-medium mb-1">Annual OTE ($)</label>
-                    <input type="text" id="ote" class="w-full border rounded p-2" value="150,000" oninput="formatAndUpdate('ote')">
+                    <label class="block text-sm font-medium mb-1 text-center">Annual OTE ($)</label>
+                    <input type="text" id="ote" class="w-full border rounded p-2 text-center" value="150,000" oninput="formatAndUpdate('ote')">
                 </div>
                 <div class="col-span-2">
                     <div class="grid grid-cols-2 gap-4 text-sm text-gray-600">
-                        <div>Annual Variable: $<span id="annual-variable">60,000</span></div>
-                        <div>Quarterly Variable: $<span id="quarterly-variable">15,000</span></div>
-                        <div>Base Commission Rate (BCR): <span id="comm-rate">9.0</span>%</div>
-                        <div>Accelerator Rate: <span id="acc-rate">13.5</span>%</div>
+                        <div class="text-center">Annual Variable: $<span id="annual-variable">60,000</span></div>
+                        <div class="text-center">Quarterly Variable: $<span id="quarterly-variable">15,000</span></div>
+                        <div class="text-center">Base Commission Rate (BCR): <span id="comm-rate">9.0</span>%</div>
+                        <div class="text-center">Accelerator Rate: <span id="acc-rate">13.5</span>%</div>
                     </div>
                 </div>
-            </div>
-            <!-- Company Name -->
-            <div class="mt-4 text-center">
-                <span class="brand-name text-xl">Gyaan.ai</span>
             </div>
         </div>
 
