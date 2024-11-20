@@ -89,6 +89,12 @@
                     </div>
                     <div class="center-grid">$<span id="q4-comm">0</span></div>
                 </div>
+                <div class="grid grid-cols-4 gap-4 font-bold mt-4">
+                    <div class="center-grid">Total</div>
+                    <div class="center-grid">—</div>
+                    <div class="center-grid">$<span id="total-actual">0</span></div>
+                    <div class="center-grid">$<span id="total-commissions">0</span></div>
+                </div>
             </div>
 
             <!-- Summary Breakdown -->
@@ -170,8 +176,11 @@
             document.getElementById('q3-comm').textContent = formatDollar(q3Comm);
             document.getElementById('q4-comm').textContent = formatDollar(q4Comm);
 
-            const totalBaseComm = q2Comm + q3Comm + q4Comm;
-            document.getElementById('summary-base-salary').textContent = formatDollar(baseSalary);
+            const totalActual = q2Actual + q3Actual + q4Actual;
+            const totalCommissions = q2Comm + q3Comm + q4Comm;
+
+            document.getElementById('total-actual').textContent = formatDollar(totalActual);
+            document.getElementById('total-commissions').textContent = formatDollar(totalCommissions);
 
             const rampBonus = document.getElementById('q1-ramp').checked ? acvVariable * 0.125 : 0;
             const csBonus = document.getElementById('cs-bonus').checked ? csVariable : 0;
@@ -179,7 +188,7 @@
             document.getElementById('ramp-bonus').textContent = formatDollar(rampBonus);
             document.getElementById('cs-total').textContent = formatDollar(csBonus);
 
-            const totalEarnings = baseSalary + rampBonus + totalBaseComm + csBonus;
+            const totalEarnings = baseSalary + rampBonus + totalCommissions + csBonus;
             document.getElementById('total-earnings').textContent = formatDollar(totalEarnings);
         }
 
