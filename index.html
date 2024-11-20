@@ -12,7 +12,7 @@
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium mb-1">Annual OTE ($)</label>
-                    <input type="number" id="ote" class="w-full border rounded p-2" value="150000" step="5000" oninput="updateAll()">
+                    <input type="text" id="ote" class="w-full border rounded p-2" value="150,000" oninput="formatAndUpdate('ote')">
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1">Base Salary (60% of OTE)</label>
@@ -34,7 +34,7 @@
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium mb-1">Annual Bookings Target ($)</label>
-                    <input type="number" id="annual-target" class="w-full border rounded p-2" value="1500000" step="50000" oninput="updateAll()">
+                    <input type="text" id="annual-target" class="w-full border rounded p-2" value="1,500,000" oninput="formatAndUpdate('annual-target')">
                 </div>
                 <div class="grid grid-cols-2 gap-4 items-center">
                     <div>
@@ -47,59 +47,20 @@
                     </div>
                 </div>
             </div>
-            <!-- Quarterly ACV Goals -->
-            <div class="mt-4">
-                <h3 class="text-lg font-bold mb-2">Quarterly ACV Goals</h3>
-                <div class="grid grid-cols-3 gap-4 text-center font-bold">
-                    <div>Quarter</div>
-                    <div>Goal</div>
-                    <div>Actual</div>
-                </div>
-                <div class="grid grid-cols-3 gap-4 items-center">
-                    <div>Q2</div>
-                    <div>$125,000</div>
-                    <div><input type="number" id="q2-acv" class="w-full border rounded p-2" placeholder="ACV ($)" oninput="updateAll()"></div>
-                </div>
-                <div class="grid grid-cols-3 gap-4 items-center">
-                    <div>Q3</div>
-                    <div>$175,000</div>
-                    <div><input type="number" id="q3-acv" class="w-full border rounded p-2" placeholder="ACV ($)" oninput="updateAll()"></div>
-                </div>
-                <div class="grid grid-cols-3 gap-4 items-center">
-                    <div>Q4</div>
-                    <div>$200,000</div>
-                    <div><input type="number" id="q4-acv" class="w-full border rounded p-2" placeholder="ACV ($)" oninput="updateAll()"></div>
-                </div>
-            </div>
-            <!-- Summary Breakdown -->
-            <div class="mt-6 bg-gray-50 p-4 rounded">
-                <h3 class="font-bold mb-2">Earnings Breakdown:</h3>
-                <div class="grid grid-cols-2 gap-2 text-sm">
-                    <div>Base Salary:</div>
-                    <div>$<span id="summary-base-salary">0</span></div>
-                    <div>Q1 Ramp Bonus (if achieved):</div>
-                    <div>$<span id="ramp-bonus">0</span></div>
-                    <div>ACV Base Commission:</div>
-                    <div>$<span id="acv-base">0</span></div>
-                    <div>ACV Accelerator Commission:</div>
-                    <div>$<span id="acv-accelerator">0</span></div>
-                    <div>Total ACV Commission:</div>
-                    <div>$<span id="acv-total">0</span></div>
-                    <div>CS Bonus (if achieved):</div>
-                    <div>$<span id="cs-total">0</span></div>
-                    <div class="font-bold">Total Potential Earnings:</div>
-                    <div class="font-bold">$<span id="total-earnings">0</span></div>
-                </div>
-            </div>
-        </div>
-    </div>
     <script>
         function formatDollar(value) {
             return value.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
         }
 
+        function formatAndUpdate(id) {
+            const input = document.getElementById(id);
+            const value = input.value.replace(/,/g, "");
+            input.value = formatDollar(Number(value) || 0);
+            updateAll();
+        }
+
         function updateAll() {
-            const ote = Number(document.getElementById('ote').value) || 0;
+            const ote = Number(document.getElementById('ote').value.replace(/,/g, "")) || 0;
             const baseSalary = ote * 0.6;
             const variable = ote * 0.4;
             const quarterlyVariable = variable / 4;
@@ -152,6 +113,9 @@
             document.getElementById('cs-total').textContent = formatDollar(csBonus);
             document.getElementById('total-earnings').textContent = formatDollar(totalEarnings);
         }
+
+        // Initialize on load
+        updateAll();
     </script>
 </body>
 </html>
