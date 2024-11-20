@@ -131,8 +131,14 @@
         }
 
         function updateAll() {
-            // Recalculate and dynamically update fields
-            const q2Goal = 125000; 
+            const annualTarget = Number(document.getElementById("annual-target").value.replace(/,/g, "")) || 0;
+            const q2Goal = Math.round(annualTarget * 0.25);
+            const q3Goal = Math.round(annualTarget * 0.35);
+            const q4Goal = Math.round(annualTarget * 0.40);
+
+            document.getElementById("q2-goal").textContent = formatDollar(q2Goal);
+            document.getElementById("q3-goal").textContent = formatDollar(q3Goal);
+            document.getElementById("q4-goal").textContent = formatDollar(q4Goal);
         }
         updateAll();
     </script>
