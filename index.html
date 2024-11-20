@@ -1,82 +1,72 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Compensation Plan Calculator</title>
+    <title>Earnings Calculator & ACV Goals</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 p-6">
     <div class="max-w-4xl mx-auto space-y-6">
-        <!-- Compensation Structure -->
+        <!-- Earnings Calculator & ACV Goals Section -->
         <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-xl font-bold mb-4">Compensation Structure</h2>
+            <h2 class="text-xl font-bold mb-4">Earnings Calculator & ACV Goals</h2>
             <div class="grid grid-cols-2 gap-4">
+                <!-- Annual Bookings Target -->
                 <div>
-                    <label class="block text-sm font-medium mb-1">Annual OTE ($)</label>
-                    <input type="number" id="ote" class="w-full border rounded p-2" value="150000" step="5000" oninput="updateAll()">
+                    <label class="block text-sm font-medium mb-1">Annual Bookings Target ($)</label>
+                    <input type="number" id="annual-target" class="w-full border rounded p-2" value="1500000" step="50000" oninput="updateAll()">
                 </div>
-                <div class="col-span-2">
-                    <div class="grid grid-cols-2 gap-4 text-sm text-gray-600">
-                        <div>Annual Variable: $<span id="variable">60,000</span></div>
-                        <div>Quarterly Variable: $<span id="quarterly-variable">15,000</span></div>
-                        <div>Base Commission Rate: <span id="comm-rate">9.0</span>%</div>
-                        <div>Accelerator Rate: <span id="acc-rate">13.5</span>%</div>
+                <div class="grid grid-cols-2 gap-4 items-center">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Include Q1 Ramp</label>
+                        <input type="checkbox" id="q1-ramp" checked onclick="updateAll()">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Include CS Bonus</label>
+                        <input type="checkbox" id="cs-bonus" checked onclick="updateAll()">
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- ACV Goals by Quarter -->
-        <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-xl font-bold mb-4">ACV Goals by Quarter</h2>
-            <div class="grid grid-cols-3 gap-4 text-center font-bold">
-                <div>Quarter</div>
-                <div>Goal</div>
-                <div>Actual</div>
-            </div>
-            <div class="grid grid-cols-3 gap-4 items-center">
-                <div>Q2</div>
-                <div>$125,000</div>
-                <div>
-                    <input type="number" id="q2-acv" class="w-full border rounded p-2" placeholder="ACV ($)" oninput="updateAll()">
+            <!-- Quarterly ACV Goals -->
+            <div class="mt-4">
+                <h3 class="text-lg font-bold mb-2">Quarterly ACV Goals</h3>
+                <div class="grid grid-cols-3 gap-4 text-center font-bold">
+                    <div>Quarter</div>
+                    <div>Goal</div>
+                    <div>Actual</div>
+                </div>
+                <div class="grid grid-cols-3 gap-4 items-center">
+                    <div>Q2</div>
+                    <div>$125,000</div>
+                    <div><input type="number" id="q2-acv" class="w-full border rounded p-2" placeholder="ACV ($)" oninput="updateAll()"></div>
+                </div>
+                <div class="grid grid-cols-3 gap-4 items-center">
+                    <div>Q3</div>
+                    <div>$175,000</div>
+                    <div><input type="number" id="q3-acv" class="w-full border rounded p-2" placeholder="ACV ($)" oninput="updateAll()"></div>
+                </div>
+                <div class="grid grid-cols-3 gap-4 items-center">
+                    <div>Q4</div>
+                    <div>$200,000</div>
+                    <div><input type="number" id="q4-acv" class="w-full border rounded p-2" placeholder="ACV ($)" oninput="updateAll()"></div>
                 </div>
             </div>
-            <div class="grid grid-cols-3 gap-4 items-center">
-                <div>Q3</div>
-                <div>$175,000</div>
-                <div>
-                    <input type="number" id="q3-acv" class="w-full border rounded p-2" placeholder="ACV ($)" oninput="updateAll()">
-                </div>
-            </div>
-            <div class="grid grid-cols-3 gap-4 items-center">
-                <div>Q4</div>
-                <div>$200,000</div>
-                <div>
-                    <input type="number" id="q4-acv" class="w-full border rounded p-2" placeholder="ACV ($)" oninput="updateAll()">
-                </div>
-            </div>
+
+            <!-- Summary Breakdown -->
             <div class="mt-6 bg-gray-50 p-4 rounded">
-                <h3 class="font-bold">Summary</h3>
-                <div class="grid grid-cols-2 gap-4 text-sm mt-2">
-                    <div>Base Commission:</div>
-                    <div>$<span id="acv-base">0</span></div>
-                    <div>Accelerator Commission:</div>
-                    <div>$<span id="acv-accelerator">0</span></div>
+                <h3 class="font-bold mb-2">Earnings Breakdown:</h3>
+                <div class="grid grid-cols-2 gap-2 text-sm">
+                    <div>Base Salary:</div>
+                    <div>$<span id="base-salary">90,000</span></div>
+                    <div>Q1 Ramp Bonus (if achieved):</div>
+                    <div>$<span id="ramp-bonus">7,500</span></div>
                     <div>Total ACV Commission:</div>
                     <div>$<span id="acv-total">0</span></div>
+                    <div>CS Bonus (if achieved):</div>
+                    <div>$<span id="cs-total">15,000</span></div>
+                    <div class="font-bold">Total Potential Earnings:</div>
+                    <div class="font-bold">$<span id="total-earnings">112,500</span></div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Earnings Summary -->
-        <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-xl font-bold mb-4">Total Compensation Summary</h2>
-            <div class="grid grid-cols-2 gap-4 text-sm mt-2">
-                <div>Base Salary:</div>
-                <div>$90,000</div>
-                <div>ACV Commission:</div>
-                <div>$<span id="rollup-acv-commission">0</span></div>
-                <div class="font-bold">Total Compensation:</div>
-                <div class="font-bold">$<span id="total-compensation">90,000</span></div>
             </div>
         </div>
     </div>
@@ -85,32 +75,33 @@
         const acvGoals = { q2: 125000, q3: 175000, q4: 200000 };
 
         function updateAll() {
-            updateCompStructure();
-            updateACV();
-            updateRollUp();
+            updateEarnings();
+            updateQuarterlyACV();
         }
 
-        function updateCompStructure() {
-            const ote = Number(document.getElementById('ote').value);
-            const variable = ote * 0.4;
-            const quarterlyVariable = variable / 4;
+        function updateEarnings() {
+            const baseSalary = 90000;
+            const includeRamp = document.getElementById('q1-ramp').checked;
+            const rampBonus = includeRamp ? 7500 : 0;
 
-            const baseCommRate = ((variable * 0.75) / 500000) * 100;
-            const accRate = baseCommRate * 1.5;
+            const includeCS = document.getElementById('cs-bonus').checked;
+            const csBonus = includeCS ? 15000 : 0;
 
-            document.getElementById('variable').textContent = variable.toLocaleString();
-            document.getElementById('quarterly-variable').textContent = quarterlyVariable.toLocaleString();
-            document.getElementById('comm-rate').textContent = baseCommRate.toFixed(1);
-            document.getElementById('acc-rate').textContent = accRate.toFixed(1);
+            document.getElementById('base-salary').textContent = baseSalary.toLocaleString();
+            document.getElementById('ramp-bonus').textContent = rampBonus.toLocaleString();
+            document.getElementById('cs-total').textContent = csBonus.toLocaleString();
+
+            const totalEarnings = baseSalary + rampBonus + Number(document.getElementById('acv-total').textContent.replace(/,/g, "")) + csBonus;
+            document.getElementById('total-earnings').textContent = totalEarnings.toLocaleString();
         }
 
-        function updateACV() {
+        function updateQuarterlyACV() {
             const q2Actual = Number(document.getElementById('q2-acv').value) || 0;
             const q3Actual = Number(document.getElementById('q3-acv').value) || 0;
             const q4Actual = Number(document.getElementById('q4-acv').value) || 0;
 
-            const commRate = parseFloat(document.getElementById('comm-rate').textContent);
-            const accRate = parseFloat(document.getElementById('acc-rate').textContent);
+            const commRate = 9.0; // Base commission rate in percentage
+            const accRate = 13.5; // Accelerator rate in percentage
 
             function calculateCommission(actual, goal) {
                 if (actual <= goal) {
@@ -123,25 +114,11 @@
             const q3Comm = calculateCommission(q3Actual, acvGoals.q3);
             const q4Comm = calculateCommission(q4Actual, acvGoals.q4);
 
-            const totalBase = q2Comm + q3Comm + q4Comm;
-            const totalAccelerator = (q2Actual > acvGoals.q2 ? (q2Actual - acvGoals.q2) * (accRate / 100) : 0) +
-                                     (q3Actual > acvGoals.q3 ? (q3Actual - acvGoals.q3) * (accRate / 100) : 0) +
-                                     (q4Actual > acvGoals.q4 ? (q4Actual - acvGoals.q4) * (accRate / 100) : 0);
-
-            document.getElementById('acv-base').textContent = totalBase.toFixed(2);
-            document.getElementById('acv-accelerator').textContent = totalAccelerator.toFixed(2);
-            document.getElementById('acv-total').textContent = (totalBase + totalAccelerator).toFixed(2);
-            document.getElementById('rollup-acv-commission').textContent = (totalBase + totalAccelerator).toFixed(2);
+            const totalACV = q2Comm + q3Comm + q4Comm;
+            document.getElementById('acv-total').textContent = totalACV.toFixed(2).toLocaleString();
         }
 
-        function updateRollUp() {
-            const baseSalary = 90000;
-            const acvCommission = Number(document.getElementById('rollup-acv-commission').textContent) || 0;
-
-            const totalCompensation = baseSalary + acvCommission;
-            document.getElementById('total-compensation').textContent = totalCompensation.toFixed(2);
-        }
-
+        // Initialize calculations
         updateAll();
     </script>
 </body>
