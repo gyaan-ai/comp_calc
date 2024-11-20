@@ -1,104 +1,124 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Q1 Activity & Pipeline Goals</title>
+    <title>Sales Comp Calculator</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 p-6">
     <div class="max-w-4xl mx-auto space-y-6">
-        <!-- Q1 Activity and Pipeline Goals Section -->
+        <!-- OTE Section -->
         <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-xl font-bold mb-4">Q1 Activity and Pipeline Goals</h2>
-            <div class="grid grid-cols-3 gap-4 text-center font-bold">
-                <div>Month</div>
-                <div>Goal</div>
-                <div>Actual</div>
-            </div>
-            <!-- Month 1 -->
-            <div class="grid grid-cols-3 gap-4 items-center">
-                <div>Month 1</div>
-                <div>6 Meetings / $0 Pipeline</div>
+            <h2 class="text-xl font-bold mb-4">Compensation Structure</h2>
+            <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <input type="number" id="m1-meetings" class="w-full border rounded p-2" placeholder="Meetings" oninput="updateQ1()">
-                    <input type="number" id="m1-pipeline" class="w-full border rounded p-2 mt-2" placeholder="Pipeline ($)" oninput="updateQ1()">
+                    <label class="block text-sm font-medium mb-1">Annual OTE ($)</label>
+                    <input type="number" id="ote" class="w-full border rounded p-2" value="150000" step="5000" oninput="updateAll()">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Base Salary (60% of OTE)</label>
+                    <input type="number" id="base-salary" class="w-full border rounded p-2 bg-gray-100" readonly>
+                </div>
+                <div class="col-span-2">
+                    <div class="grid grid-cols-2 gap-4 text-sm text-gray-600">
+                        <div>Annual Variable: $<span id="variable">60000</span></div>
+                        <div>Quarterly Variable: $<span id="quarterly-variable">15000</span></div>
+                        <div>ACV Allocation (75% of Variable): $<span id="acv-allocation">45000</span></div>
+                        <div>CS Allocation (25% of Variable): $<span id="cs-allocation">15000</span></div>
+                    </div>
                 </div>
             </div>
-            <!-- Month 2 -->
-            <div class="grid grid-cols-3 gap-4 items-center">
-                <div>Month 2</div>
-                <div>8 Meetings / $100K Pipeline</div>
-                <div>
-                    <input type="number" id="m2-meetings" class="w-full border rounded p-2" placeholder="Meetings" oninput="updateQ1()">
-                    <input type="number" id="m2-pipeline" class="w-full border rounded p-2 mt-2" placeholder="Pipeline ($)" oninput="updateQ1()">
-                </div>
-            </div>
-            <!-- Month 3 -->
-            <div class="grid grid-cols-3 gap-4 items-center">
-                <div>Month 3</div>
-                <div>10 Meetings / $200K Pipeline</div>
-                <div>
-                    <input type="number" id="m3-meetings" class="w-full border rounded p-2" placeholder="Meetings" oninput="updateQ1()">
-                    <input type="number" id="m3-pipeline" class="w-full border rounded p-2 mt-2" placeholder="Pipeline ($)" oninput="updateQ1()">
-                </div>
-            </div>
-            <!-- Summary -->
-            <div class="mt-6 bg-gray-50 p-4 rounded">
-                <h3 class="font-bold">Summary</h3>
-                <div class="grid grid-cols-2 gap-4 text-sm mt-2">
-                    <div>Activity Achievement:</div>
-                    <div><span id="activity-achievement">0</span>%</div>
-                    <div>Pipeline Achievement:</div>
-                    <div><span id="pipeline-achievement">0</span>%</div>
-                    <div>Ramp Bonus:</div>
-                    <div>$<span id="ramp-bonus">0</span></div>
+        </div>
+
+        <!-- Earnings Calculator -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-bold mb-4">Earnings Calculator</h2>
+            <div class="grid gap-4">
+                <div class="mt-4 p-4 bg-gray-50 rounded">
+                    <h3 class="font-bold mb-2">Potential Earnings Breakdown:</h3>
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div>Base Salary:</div>
+                        <div>$<span id="earnings-base">90,000</span></div>
+                        <div>Ramp Bonus (Q1):</div>
+                        <div>$<span id="earnings-ramp">7,500</span></div>
+                        <div>ACV Commissions:</div>
+                        <div>$<span id="earnings-acv">45,000</span></div>
+                        <div>CS Bonus:</div>
+                        <div>$<span id="earnings-cs">15,000</span></div>
+                        <div class="font-bold">Total Compensation:</div>
+                        <div class="font-bold">$<span id="earnings-total">150,000</span></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Hard-coded goals
-        const goals = {
-            m1: { meetings: 6, pipeline: 0 },
-            m2: { meetings: 8, pipeline: 100000 },
-            m3: { meetings: 10, pipeline: 200000 },
-        };
+        function updateAll() {
+            const ote = Number(document.getElementById('ote').value) || 0;
 
-        const rampBonusTotal = 7500; // Total ramp bonus available
+            // Calculations for Base Salary and Variable Comp
+            const baseSalary = calculateBaseSalary(ote);
+            const variable = calculateVariable(ote);
+            const quarterlyVariable = calculateQuarterlyVariable(variable);
 
-        function updateQ1() {
-            // Read actual values
-            const m1Meetings = Number(document.getElementById('m1-meetings').value) || 0;
-            const m1Pipeline = Number(document.getElementById('m1-pipeline').value) || 0;
-            const m2Meetings = Number(document.getElementById('m2-meetings').value) || 0;
-            const m2Pipeline = Number(document.getElementById('m2-pipeline').value) || 0;
-            const m3Meetings = Number(document.getElementById('m3-meetings').value) || 0;
-            const m3Pipeline = Number(document.getElementById('m3-pipeline').value) || 0;
+            // Allocate variable comp
+            const acvAllocation = variable * 0.75; // 75% for ACV commissions
+            const csAllocation = variable * 0.25;  // 25% for CS bonus
 
-            // Calculate achievement percentages
-            const activityAch = (
-                Math.min(m1Meetings / goals.m1.meetings, 1) +
-                Math.min(m2Meetings / goals.m2.meetings, 1) +
-                Math.min(m3Meetings / goals.m3.meetings, 1)
-            ) / 3 * 100;
-
-            const pipelineAch = (
-                Math.min(m1Pipeline / goals.m1.pipeline, 1) +
-                Math.min(m2Pipeline / goals.m2.pipeline, 1) +
-                Math.min(m3Pipeline / goals.m3.pipeline, 1)
-            ) / 3 * 100;
-
-            // Calculate ramp bonus
-            const rampBonus = rampBonusTotal * (activityAch / 100 + pipelineAch / 100) / 2;
-
-            // Update DOM
-            document.getElementById('activity-achievement').textContent = activityAch.toFixed(1);
-            document.getElementById('pipeline-achievement').textContent = pipelineAch.toFixed(1);
-            document.getElementById('ramp-bonus').textContent = rampBonus.toFixed(2);
+            updateCompensationStructure(baseSalary, variable, quarterlyVariable, acvAllocation, csAllocation);
+            updateEarningsCalculator(baseSalary, quarterlyVariable, acvAllocation, csAllocation);
         }
 
-        // Initialize with default values
-        updateQ1();
+        // Helpers
+        function calculateBaseSalary(ote) {
+            return ote * 0.6;
+        }
+
+        function calculateVariable(ote) {
+            return ote * 0.4;
+        }
+
+        function calculateQuarterlyVariable(variable) {
+            return variable / 4;
+        }
+
+        function calculateRampBonus(quarterlyVariable, activityAch, pipelineAch) {
+            const rampTarget = quarterlyVariable * 0.5; // 50% tied to ramp
+            return (rampTarget * (activityAch / 100)) + (rampTarget * (pipelineAch / 100));
+        }
+
+        function calculateCustomerSuccessBonus(csAllocation, implementationAch, featureUsageAch) {
+            const combinedAch = (implementationAch + featureUsageAch) / 2; // Combined achievement
+            return (csAllocation * combinedAch) / 100;
+        }
+
+        // Update DOM
+        function updateCompensationStructure(base, variable, quarterly, acv, cs) {
+            document.getElementById('base-salary').value = base.toLocaleString();
+            document.getElementById('variable').textContent = variable.toLocaleString();
+            document.getElementById('quarterly-variable').textContent = quarterly.toLocaleString();
+            document.getElementById('acv-allocation').textContent = acv.toLocaleString();
+            document.getElementById('cs-allocation').textContent = cs.toLocaleString();
+        }
+
+        function updateEarningsCalculator(base, quarterlyVariable, acvAllocation, csAllocation) {
+            const activityAch = 100; // Mock value: Activity achievement
+            const pipelineAch = 100; // Mock value: Pipeline achievement
+            const implementationAch = 100; // Mock value: Implementation achievement
+            const featureUsageAch = 100; // Mock value: Feature usage achievement
+
+            const rampBonus = calculateRampBonus(quarterlyVariable, activityAch, pipelineAch);
+            const csBonus = calculateCustomerSuccessBonus(csAllocation, implementationAch, featureUsageAch);
+
+            document.getElementById('earnings-base').textContent = base.toLocaleString();
+            document.getElementById('earnings-ramp').textContent = Math.round(rampBonus).toLocaleString();
+            document.getElementById('earnings-acv').textContent = acvAllocation.toLocaleString();
+            document.getElementById('earnings-cs').textContent = Math.round(csBonus).toLocaleString();
+            document.getElementById('earnings-total').textContent = Math.round(base + rampBonus + acvAllocation + csBonus).toLocaleString();
+        }
+
+        // Initialize
+        updateAll();
     </script>
 </body>
 </html>
