@@ -63,19 +63,19 @@
                 </div>
                 <div class="grid grid-cols-4 gap-4 items-center">
                     <div class="center-text">Q2</div>
-                    <div class="center-text">$125,000</div>
+                    <div class="center-text">$<span id="q2-goal">0</span></div>
                     <div><input type="number" id="q2-acv" class="w-full border rounded p-2" placeholder="ACV ($)" oninput="updateAll()"></div>
                     <div class="center-text">$<span id="q2-comm">0</span></div>
                 </div>
                 <div class="grid grid-cols-4 gap-4 items-center">
                     <div class="center-text">Q3</div>
-                    <div class="center-text">$175,000</div>
+                    <div class="center-text">$<span id="q3-goal">0</span></div>
                     <div><input type="number" id="q3-acv" class="w-full border rounded p-2" placeholder="ACV ($)" oninput="updateAll()"></div>
                     <div class="center-text">$<span id="q3-comm">0</span></div>
                 </div>
                 <div class="grid grid-cols-4 gap-4 items-center">
                     <div class="center-text">Q4</div>
-                    <div class="center-text">$200,000</div>
+                    <div class="center-text">$<span id="q4-goal">0</span></div>
                     <div><input type="number" id="q4-acv" class="w-full border rounded p-2" placeholder="ACV ($)" oninput="updateAll()"></div>
                     <div class="center-text">$<span id="q4-comm">0</span></div>
                 </div>
@@ -118,20 +118,21 @@
             const ote = Number(document.getElementById('ote').value.replace(/,/g, "")) || 0;
             const baseSalary = ote * 0.6;
             const variable = ote * 0.4;
-            const quarterlyVariable = variable / 4;
 
-            const annualTarget = Number(document.getElementById('annual-target').value.replace(/,/g, "")) || 500000;
+            const annualTarget = Number(document.getElementById('annual-target').value.replace(/,/g, "")) || 0;
+            const q2Goal = annualTarget * 0.25;
+            const q3Goal = annualTarget * 0.35;
+            const q4Goal = annualTarget * 0.40;
+
+            // Update Quarterly Goals
+            document.getElementById('q2-goal').textContent = formatDollar(q2Goal);
+            document.getElementById('q3-goal').textContent = formatDollar(q3Goal);
+            document.getElementById('q4-goal').textContent = formatDollar(q4Goal);
+
             const commRate = ((variable * 0.75) / annualTarget) * 100;
             const accRate = commRate * 1.5;
 
-            // Update Compensation Structure
-            document.getElementById('base-salary').value = formatDollar(baseSalary);
-            document.getElementById('annual-variable').textContent = formatDollar(variable);
-            document.getElementById('quarterly-variable').textContent = formatDollar(quarterlyVariable);
-            document.getElementById('comm-rate').textContent = commRate.toFixed(1);
-            document.getElementById('acc-rate').textContent = accRate.toFixed(1);
-
-            // Calculate and Update Quarterly ACV Commissions
+            // Update Quarterly ACV Commissions
             const q2Actual = Number(document.getElementById('q2-acv').value) || 0;
             const q3Actual = Number(document.getElementById('q3-acv').value) || 0;
             const q4Actual = Number(document.getElementById('q4-acv').value) || 0;
@@ -145,9 +146,9 @@
                 return base + accelerator;
             }
 
-            const q2Comm = calculateCommission(q2Actual, 125000);
-            const q3Comm = calculateCommission(q3Actual, 175000);
-            const q4Comm = calculateCommission(q4Actual, 200000);
+            const q2Comm = calculateCommission(q2Actual, q2Goal);
+            const q3Comm = calculateCommission(q3Actual, q3Goal);
+            const q4Comm = calculateCommission(q4Actual, q4Goal);
 
             document.getElementById('q2-comm').textContent = formatDollar(q2Comm);
             document.getElementById('q3-comm').textContent = formatDollar(q3Comm);
@@ -155,14 +156,12 @@
 
             // Update Total Earnings Breakdown
             const totalBaseComm = q2Comm + q3Comm + q4Comm;
-            const includeRamp = document.getElementById('q1-ramp').checked;
-            const rampBonus = includeRamp ? quarterlyVariable * 0.5 : 0;
-            const includeCS = document.getElementById('cs-bonus').checked;
-            const csBonus = includeCS ? variable * 0.25 : 0;
-
             document.getElementById('summary-base-salary').textContent = formatDollar(baseSalary);
+
+            const rampBonus = document.getElementById('q1-ramp').checked ? variable * 0.125 : 0;
+            const csBonus = document.getElementById('cs-bonus').checked ? variable * 0.25 : 0;
+
             document.getElementById('ramp-bonus').textContent = formatDollar(rampBonus);
-            document.getElementById('acv-base').textContent = formatDollar(totalBaseComm);
             document.getElementById('cs-total').textContent = formatDollar(csBonus);
 
             const totalEarnings = baseSalary + rampBonus + totalBaseComm + csBonus;
