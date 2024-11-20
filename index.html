@@ -68,19 +68,25 @@
                 <div class="grid grid-cols-4 gap-4 items-center">
                     <div class="center-grid">Q2</div>
                     <div class="center-grid">$<span id="q2-goal">0</span></div>
-                    <div><input type="number" id="q2-acv" class="w-full border rounded p-2" placeholder="ACV ($)" oninput="updateAll()"></div>
+                    <div>
+                        <input type="text" id="q2-acv" class="w-full border rounded p-2 text-center" placeholder="ACV ($)" oninput="formatAndUpdate('q2-acv')">
+                    </div>
                     <div class="center-grid">$<span id="q2-comm">0</span></div>
                 </div>
                 <div class="grid grid-cols-4 gap-4 items-center">
                     <div class="center-grid">Q3</div>
                     <div class="center-grid">$<span id="q3-goal">0</span></div>
-                    <div><input type="number" id="q3-acv" class="w-full border rounded p-2" placeholder="ACV ($)" oninput="updateAll()"></div>
+                    <div>
+                        <input type="text" id="q3-acv" class="w-full border rounded p-2 text-center" placeholder="ACV ($)" oninput="formatAndUpdate('q3-acv')">
+                    </div>
                     <div class="center-grid">$<span id="q3-comm">0</span></div>
                 </div>
                 <div class="grid grid-cols-4 gap-4 items-center">
                     <div class="center-grid">Q4</div>
                     <div class="center-grid">$<span id="q4-goal">0</span></div>
-                    <div><input type="number" id="q4-acv" class="w-full border rounded p-2" placeholder="ACV ($)" oninput="updateAll()"></div>
+                    <div>
+                        <input type="text" id="q4-acv" class="w-full border rounded p-2 text-center" placeholder="ACV ($)" oninput="formatAndUpdate('q4-acv')">
+                    </div>
                     <div class="center-grid">$<span id="q4-comm">0</span></div>
                 </div>
             </div>
@@ -124,7 +130,6 @@
             const acvVariable = ote * 0.3;
             const csVariable = ote * 0.1;
 
-            // Update Compensation Structure
             document.getElementById('base-salary').textContent = formatDollar(baseSalary);
             document.getElementById('acv-variable').textContent = formatDollar(acvVariable);
             document.getElementById('cs-variable').textContent = formatDollar(csVariable);
@@ -134,22 +139,19 @@
             const q3Goal = annualTarget * 0.35;
             const q4Goal = annualTarget * 0.40;
 
-            // Update Quarterly Goals
             document.getElementById('q2-goal').textContent = formatDollar(q2Goal);
             document.getElementById('q3-goal').textContent = formatDollar(q3Goal);
             document.getElementById('q4-goal').textContent = formatDollar(q4Goal);
 
-            const commRate = ((acvVariable) / annualTarget) * 100;
+            const commRate = (acvVariable / annualTarget) * 100;
             const accRate = commRate * 1.5;
 
-            // Update BCR and Accelerator Rate
             document.getElementById('comm-rate').textContent = commRate.toFixed(1);
             document.getElementById('acc-rate').textContent = accRate.toFixed(1);
 
-            // Commissions Calculation
-            const q2Actual = Number(document.getElementById('q2-acv').value) || 0;
-            const q3Actual = Number(document.getElementById('q3-acv').value) || 0;
-            const q4Actual = Number(document.getElementById('q4-acv').value) || 0;
+            const q2Actual = Number(document.getElementById('q2-acv').value.replace(/,/g, "")) || 0;
+            const q3Actual = Number(document.getElementById('q3-acv').value.replace(/,/g, "")) || 0;
+            const q4Actual = Number(document.getElementById('q4-acv').value.replace(/,/g, "")) || 0;
 
             function calculateCommission(actual, goal) {
                 if (actual <= goal) {
@@ -168,7 +170,6 @@
             document.getElementById('q3-comm').textContent = formatDollar(q3Comm);
             document.getElementById('q4-comm').textContent = formatDollar(q4Comm);
 
-            // Update Total Earnings Breakdown
             const totalBaseComm = q2Comm + q3Comm + q4Comm;
             document.getElementById('summary-base-salary').textContent = formatDollar(baseSalary);
 
