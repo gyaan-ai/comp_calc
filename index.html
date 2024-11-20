@@ -78,6 +78,10 @@
     <script>
         const acvGoals = { q2: 125000, q3: 175000, q4: 200000 };
 
+        function formatDollar(value) {
+            return value.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        }
+
         function updateAll() {
             updateEarnings();
             updateQuarterlyACV();
@@ -91,12 +95,12 @@
             const includeCS = document.getElementById('cs-bonus').checked;
             const csBonus = includeCS ? 15000 : 0;
 
-            document.getElementById('base-salary').textContent = baseSalary.toLocaleString();
-            document.getElementById('ramp-bonus').textContent = rampBonus.toLocaleString();
-            document.getElementById('cs-total').textContent = csBonus.toLocaleString();
+            document.getElementById('base-salary').textContent = formatDollar(baseSalary);
+            document.getElementById('ramp-bonus').textContent = formatDollar(rampBonus);
+            document.getElementById('cs-total').textContent = formatDollar(csBonus);
 
             const totalEarnings = baseSalary + rampBonus + Number(document.getElementById('acv-total').textContent.replace(/,/g, "")) + csBonus;
-            document.getElementById('total-earnings').textContent = totalEarnings.toLocaleString();
+            document.getElementById('total-earnings').textContent = formatDollar(totalEarnings);
         }
 
         function updateQuarterlyACV() {
@@ -123,9 +127,9 @@
             const totalBase = q2Comm.base + q3Comm.base + q4Comm.base;
             const totalAccelerator = q2Comm.accelerator + q3Comm.accelerator + q4Comm.accelerator;
 
-            document.getElementById('acv-base').textContent = totalBase.toFixed(2).toLocaleString();
-            document.getElementById('acv-accelerator').textContent = totalAccelerator.toFixed(2).toLocaleString();
-            document.getElementById('acv-total').textContent = (totalBase + totalAccelerator).toFixed(2).toLocaleString();
+            document.getElementById('acv-base').textContent = formatDollar(totalBase);
+            document.getElementById('acv-accelerator').textContent = formatDollar(totalAccelerator);
+            document.getElementById('acv-total').textContent = formatDollar(totalBase + totalAccelerator);
         }
 
         // Initialize calculations
