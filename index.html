@@ -1,3 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Earnings Calculator & ACV Goals</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-4xl mx-auto space-y-6">
+        <!-- Compensation Structure Section -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-bold mb-4">Compensation Structure</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Annual OTE ($)</label>
+                    <input type="number" id="ote" class="w-full border rounded p-2" value="150000" step="5000" oninput="updateAll()">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Base Salary (60% of OTE)</label>
+                    <input type="text" id="base-salary" class="w-full border rounded p-2 bg-gray-100" readonly>
+                </div>
+                <div class="col-span-2">
+                    <div class="grid grid-cols-2 gap-4 text-sm text-gray-600">
+                        <div>Annual Variable: $<span id="annual-variable">60,000</span></div>
+                        <div>Quarterly Variable: $<span id="quarterly-variable">15,000</span></div>
+                        <div>Base Commission Rate (BCR): <span id="comm-rate">9.0</span>%</div>
+                        <div>Accelerator Rate: <span id="acc-rate">13.5</span>%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Earnings Calculator & ACV Goals Section -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-bold mb-4">Earnings Calculator & ACV Goals</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Annual Bookings Target ($)</label>
+                    <input type="number" id="annual-target" class="w-full border rounded p-2" value="1500000" step="50000" oninput="updateAll()">
+                </div>
+                <div class="grid grid-cols-2 gap-4 items-center">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Include Q1 Ramp</label>
+                        <input type="checkbox" id="q1-ramp" checked onclick="updateAll()">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Include CS Bonus</label>
+                        <input type="checkbox" id="cs-bonus" checked onclick="updateAll()">
+                    </div>
+                </div>
+            </div>
+            <!-- Quarterly ACV Goals -->
+            <div class="mt-4">
+                <h3 class="text-lg font-bold mb-2">Quarterly ACV Goals</h3>
+                <div class="grid grid-cols-3 gap-4 text-center font-bold">
+                    <div>Quarter</div>
+                    <div>Goal</div>
+                    <div>Actual</div>
+                </div>
+                <div class="grid grid-cols-3 gap-4 items-center">
+                    <div>Q2</div>
+                    <div>$125,000</div>
+                    <div><input type="number" id="q2-acv" class="w-full border rounded p-2" placeholder="ACV ($)" oninput="updateAll()"></div>
+                </div>
+                <div class="grid grid-cols-3 gap-4 items-center">
+                    <div>Q3</div>
+                    <div>$175,000</div>
+                    <div><input type="number" id="q3-acv" class="w-full border rounded p-2" placeholder="ACV ($)" oninput="updateAll()"></div>
+                </div>
+                <div class="grid grid-cols-3 gap-4 items-center">
+                    <div>Q4</div>
+                    <div>$200,000</div>
+                    <div><input type="number" id="q4-acv" class="w-full border rounded p-2" placeholder="ACV ($)" oninput="updateAll()"></div>
+                </div>
+            </div>
+            <!-- Summary Breakdown -->
+            <div class="mt-6 bg-gray-50 p-4 rounded">
+                <h3 class="font-bold mb-2">Earnings Breakdown:</h3>
+                <div class="grid grid-cols-2 gap-2 text-sm">
+                    <div>Base Salary:</div>
+                    <div>$<span id="summary-base-salary">0</span></div>
+                    <div>Q1 Ramp Bonus (if achieved):</div>
+                    <div>$<span id="ramp-bonus">0</span></div>
+                    <div>ACV Base Commission:</div>
+                    <div>$<span id="acv-base">0</span></div>
+                    <div>ACV Accelerator Commission:</div>
+                    <div>$<span id="acv-accelerator">0</span></div>
+                    <div>Total ACV Commission:</div>
+                    <div>$<span id="acv-total">0</span></div>
+                    <div>CS Bonus (if achieved):</div>
+                    <div>$<span id="cs-total">0</span></div>
+                    <div class="font-bold">Total Potential Earnings:</div>
+                    <div class="font-bold">$<span id="total-earnings">0</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         function formatDollar(value) {
             return value.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
@@ -48,4 +143,15 @@
             const includeRamp = document.getElementById('q1-ramp').checked;
             const rampBonus = includeRamp ? quarterlyVariable * 0.5 : 0;
 
-            const includeCS = document.getElementById('cs-bonus'). &#8203;:contentReference[oaicite:0]{index=0}&#8203;
+            const includeCS = document.getElementById('cs-bonus').checked;
+            const csBonus = includeCS ? variable * 0.25 : 0;
+
+            const totalEarnings = baseSalary + rampBonus + totalACV + csBonus;
+            document.getElementById('summary-base-salary').textContent = formatDollar(baseSalary);
+            document.getElementById('ramp-bonus').textContent = formatDollar(rampBonus);
+            document.getElementById('cs-total').textContent = formatDollar(csBonus);
+            document.getElementById('total-earnings').textContent = formatDollar(totalEarnings);
+        }
+    </script>
+</body>
+</html>
