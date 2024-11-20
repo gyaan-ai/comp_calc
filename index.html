@@ -11,6 +11,11 @@
             justify-content: center;
             text-align: center;
         }
+        .center-grid {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
     </style>
 </head>
 <body class="bg-gray-100 p-6">
@@ -18,19 +23,15 @@
         <!-- Compensation Structure Section -->
         <div class="bg-white rounded-lg shadow p-6 center-content">
             <h2 class="text-xl font-bold mb-4">Compensation Structure</h2>
-            <div class="grid grid-cols-2 gap-4 w-full">
-                <div>
-                    <label class="block text-sm font-medium mb-1 text-center">Annual OTE ($)</label>
-                    <input type="text" id="ote" class="w-full border rounded p-2 text-center" value="150,000" oninput="formatAndUpdate('ote')">
-                </div>
-                <div class="col-span-2">
-                    <div class="grid grid-cols-2 gap-4 text-sm text-gray-600">
-                        <div class="text-center">Annual Variable: $<span id="annual-variable">60,000</span></div>
-                        <div class="text-center">Quarterly Variable: $<span id="quarterly-variable">15,000</span></div>
-                        <div class="text-center">Base Commission Rate (BCR): <span id="comm-rate">9.0</span>%</div>
-                        <div class="text-center">Accelerator Rate: <span id="acc-rate">13.5</span>%</div>
-                    </div>
-                </div>
+            <div class="center-content">
+                <label class="block text-sm font-medium mb-1">Annual OTE ($)</label>
+                <input type="text" id="ote" class="w-1/2 border rounded p-2 text-center" value="150,000" oninput="formatAndUpdate('ote')">
+            </div>
+            <div class="mt-4 grid grid-cols-2 gap-4 text-sm text-gray-600">
+                <div class="text-center">Annual Variable: $<span id="annual-variable">60,000</span></div>
+                <div class="text-center">Quarterly Variable: $<span id="quarterly-variable">15,000</span></div>
+                <div class="text-center">Base Commission Rate (BCR): <span id="comm-rate">9.0</span>%</div>
+                <div class="text-center">Accelerator Rate: <span id="acc-rate">13.5</span>%</div>
             </div>
         </div>
 
@@ -133,6 +134,10 @@
 
             const commRate = ((variable * 0.75) / annualTarget) * 100;
             const accRate = commRate * 1.5;
+
+            // Update Compensation Structure (BCR and Accelerator Rate)
+            document.getElementById('comm-rate').textContent = commRate.toFixed(1);
+            document.getElementById('acc-rate').textContent = accRate.toFixed(1);
 
             // Update Quarterly ACV Commissions
             const q2Actual = Number(document.getElementById('q2-acv').value) || 0;
