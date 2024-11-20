@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sales Comp Calculator</title>
+    <title>Compensation Plan Calculator</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 p-6">
     <div class="max-w-4xl mx-auto space-y-6">
-        <!-- OTE Section -->
+        <!-- Compensation Structure -->
         <div class="bg-white rounded-lg shadow p-6">
             <h2 class="text-xl font-bold mb-4">Compensation Structure</h2>
             <div class="grid grid-cols-2 gap-4">
@@ -14,16 +14,12 @@
                     <label class="block text-sm font-medium mb-1">Annual OTE ($)</label>
                     <input type="number" id="ote" class="w-full border rounded p-2" value="150000" step="5000" oninput="updateAll()">
                 </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">Base Salary (60% of OTE)</label>
-                    <input type="number" id="base-salary" class="w-full border rounded p-2 bg-gray-100" readonly>
-                </div>
                 <div class="col-span-2">
                     <div class="grid grid-cols-2 gap-4 text-sm text-gray-600">
-                        <div>Annual Variable: $<span id="variable">60000</span></div>
-                        <div>Quarterly Variable: $<span id="quarterly-variable">15000</span></div>
-                        <div>ACV Allocation (75% of Variable): $<span id="acv-allocation">45000</span></div>
-                        <div>CS Allocation (25% of Variable): $<span id="cs-allocation">15000</span></div>
+                        <div>Annual Variable: $<span id="variable">60,000</span></div>
+                        <div>Quarterly Variable: $<span id="quarterly-variable">15,000</span></div>
+                        <div>Base Commission Rate: <span id="comm-rate">9.0</span>%</div>
+                        <div>Accelerator Rate: <span id="acc-rate">13.5</span>%</div>
                     </div>
                 </div>
             </div>
@@ -33,19 +29,35 @@
         <div class="bg-white rounded-lg shadow p-6">
             <h2 class="text-xl font-bold mb-4">Earnings Calculator</h2>
             <div class="grid gap-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Annual Bookings Target ($)</label>
+                        <input type="number" id="what-if-bookings" class="w-full border rounded p-2" value="500000" step="50000" oninput="updateAll()">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Include Q1 Ramp</label>
+                            <input type="checkbox" id="what-if-ramp" checked onclick="updateAll()">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Include CS Bonus</label>
+                            <input type="checkbox" id="what-if-cs" checked onclick="updateAll()">
+                        </div>
+                    </div>
+                </div>
                 <div class="mt-4 p-4 bg-gray-50 rounded">
                     <h3 class="font-bold mb-2">Potential Earnings Breakdown:</h3>
                     <div class="grid grid-cols-2 gap-2 text-sm">
                         <div>Base Salary:</div>
-                        <div>$<span id="earnings-base">90,000</span></div>
-                        <div>Ramp Bonus (Q1):</div>
-                        <div>$<span id="earnings-ramp">7,500</span></div>
-                        <div>ACV Commissions:</div>
-                        <div>$<span id="earnings-acv">45,000</span></div>
-                        <div>CS Bonus:</div>
-                        <div>$<span id="earnings-cs">15,000</span></div>
-                        <div class="font-bold">Total Compensation:</div>
-                        <div class="font-bold">$<span id="earnings-total">150,000</span></div>
+                        <div>$<span id="what-if-base">90,000</span></div>
+                        <div>Q1 Ramp (if achieved):</div>
+                        <div>$<span id="what-if-ramp-amount">7,500</span></div>
+                        <div>ACV Commission:</div>
+                        <div>$<span id="what-if-acv">45,000</span></div>
+                        <div>CS Bonus (if achieved):</div>
+                        <div>$<span id="what-if-cs-amount">15,000</span></div>
+                        <div class="font-bold">Total Potential Earnings:</div>
+                        <div class="font-bold">$<span id="what-if-total">157,500</span></div>
                     </div>
                 </div>
             </div>
@@ -54,70 +66,45 @@
 
     <script>
         function updateAll() {
-            const ote = Number(document.getElementById('ote').value) || 0;
+            const ote = Number(document.getElementById('ote').value);
+            const baseSalary = ote * 0.6;
+            const variable = ote * 0.4;
+            const quarterlyVariable = variable / 4;
 
-            // Calculations for Base Salary and Variable Comp
-            const baseSalary = calculateBaseSalary(ote);
-            const variable = calculateVariable(ote);
-            const quarterlyVariable = calculateQuarterlyVariable(variable);
-
-            // Allocate variable comp
-            const acvAllocation = variable * 0.75; // 75% for ACV commissions
-            const csAllocation = variable * 0.25;  // 25% for CS bonus
-
-            updateCompensationStructure(baseSalary, variable, quarterlyVariable, acvAllocation, csAllocation);
-            updateEarningsCalculator(baseSalary, quarterlyVariable, acvAllocation, csAllocation);
-        }
-
-        // Helpers
-        function calculateBaseSalary(ote) {
-            return ote * 0.6;
-        }
-
-        function calculateVariable(ote) {
-            return ote * 0.4;
-        }
-
-        function calculateQuarterlyVariable(variable) {
-            return variable / 4;
-        }
-
-        function calculateRampBonus(quarterlyVariable, activityAch, pipelineAch) {
-            const rampTarget = quarterlyVariable * 0.5; // 50% tied to ramp
-            return (rampTarget * (activityAch / 100)) + (rampTarget * (pipelineAch / 100));
-        }
-
-        function calculateCustomerSuccessBonus(csAllocation, implementationAch, featureUsageAch) {
-            const combinedAch = (implementationAch + featureUsageAch) / 2; // Combined achievement
-            return (csAllocation * combinedAch) / 100;
-        }
-
-        // Update DOM
-        function updateCompensationStructure(base, variable, quarterly, acv, cs) {
-            document.getElementById('base-salary').value = base.toLocaleString();
+            // Update Compensation Structure
             document.getElementById('variable').textContent = variable.toLocaleString();
-            document.getElementById('quarterly-variable').textContent = quarterly.toLocaleString();
-            document.getElementById('acv-allocation').textContent = acv.toLocaleString();
-            document.getElementById('cs-allocation').textContent = cs.toLocaleString();
+            document.getElementById('quarterly-variable').textContent = quarterlyVariable.toLocaleString();
+            
+            const baseCommRate = ((variable * 0.75) / 500000) * 100;
+            const accRate = baseCommRate * 1.5;
+            document.getElementById('comm-rate').textContent = baseCommRate.toFixed(1);
+            document.getElementById('acc-rate').textContent = accRate.toFixed(1);
+
+            // Update Earnings Calculator
+            const bookings = Number(document.getElementById('what-if-bookings').value);
+            const includeRamp = document.getElementById('what-if-ramp').checked;
+            const includeCS = document.getElementById('what-if-cs').checked;
+
+            let acvComm = 0;
+            if (bookings <= 500000) {
+                acvComm = bookings * (baseCommRate / 100);
+            } else {
+                acvComm = (500000 * (baseCommRate / 100)) + ((bookings - 500000) * (accRate / 100));
+            }
+
+            const rampAmount = includeRamp ? (quarterlyVariable * 0.5) : 0;
+            const csAmount = includeCS ? (variable * 0.25) : 0;
+
+            document.getElementById('what-if-base').textContent = baseSalary.toLocaleString();
+            document.getElementById('what-if-ramp-amount').textContent = rampAmount.toLocaleString();
+            document.getElementById('what-if-acv').textContent = Math.round(acvComm).toLocaleString();
+            document.getElementById('what-if-cs-amount').textContent = csAmount.toLocaleString();
+
+            const whatIfTotal = baseSalary + rampAmount + acvComm + csAmount;
+            document.getElementById('what-if-total').textContent = Math.round(whatIfTotal).toLocaleString();
         }
 
-        function updateEarningsCalculator(base, quarterlyVariable, acvAllocation, csAllocation) {
-            const activityAch = 100; // Mock value: Activity achievement
-            const pipelineAch = 100; // Mock value: Pipeline achievement
-            const implementationAch = 100; // Mock value: Implementation achievement
-            const featureUsageAch = 100; // Mock value: Feature usage achievement
-
-            const rampBonus = calculateRampBonus(quarterlyVariable, activityAch, pipelineAch);
-            const csBonus = calculateCustomerSuccessBonus(csAllocation, implementationAch, featureUsageAch);
-
-            document.getElementById('earnings-base').textContent = base.toLocaleString();
-            document.getElementById('earnings-ramp').textContent = Math.round(rampBonus).toLocaleString();
-            document.getElementById('earnings-acv').textContent = acvAllocation.toLocaleString();
-            document.getElementById('earnings-cs').textContent = Math.round(csBonus).toLocaleString();
-            document.getElementById('earnings-total').textContent = Math.round(base + rampBonus + acvAllocation + csBonus).toLocaleString();
-        }
-
-        // Initialize
+        // Initialize default values
         updateAll();
     </script>
 </body>
