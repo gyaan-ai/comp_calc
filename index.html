@@ -119,6 +119,7 @@
     </div>
 
     <script>
+        // JavaScript calculations and dynamic updates
         function formatDollar(value) {
             return value.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
         }
@@ -165,34 +166,39 @@
                 }
                 const base = goal * (commRate / 100);
                 const accelerator = (actual - goal) * (accRate / 100);
-                return base + accelerator;
+                return { base, accelerator, total: base + accelerator };
             }
 
             const q2Comm = calculateCommission(q2Actual, q2Goal);
             const q3Comm = calculateCommission(q3Actual, q3Goal);
             const q4Comm = calculateCommission(q4Actual, q4Goal);
 
-            document.getElementById('q2-comm').textContent = formatDollar(q2Comm);
-            document.getElementById('q3-comm').textContent = formatDollar(q3Comm);
-            document.getElementById('q4-comm').textContent = formatDollar(q4Comm);
+            document.getElementById('q2-comm').textContent = formatDollar(q2Comm.total);
+            document.getElementById('q3-comm').textContent = formatDollar(q3Comm.total);
+            document.getElementById('q4-comm').textContent = formatDollar(q4Comm.total);
 
-            const totalActual = q2Actual + q3Actual + q4Actual;
-            const totalCommissions = q2Comm + q3Comm + q4Comm;
+            const totalBaseComm = q2Comm.base + q3Comm.base + q4Comm.base;
+            const totalAcceleratorComm = q2Comm.accelerator + q3Comm.accelerator + q4Comm.accelerator;
+            const totalCommissions = totalBaseComm + totalAcceleratorComm;
 
-            document.getElementById('total-actual').textContent = formatDollar(totalActual);
-            document.getElementById('total-commissions').textContent = formatDollar(totalCommissions);
+            document.getElementById('acv-base').textContent = formatDollar(totalBaseComm);
+            document.getElementById('acv-accelerator').textContent = formatDollar(totalAcceleratorComm);
 
             const rampBonus = document.getElementById('q1-ramp').checked ? acvVariable * 0.125 : 0;
             const csBonus = document.getElementById('cs-bonus').checked ? csVariable : 0;
 
+            document.getElementById('summary-base-salary').textContent = formatDollar(baseSalary);
             document.getElementById('ramp-bonus').textContent = formatDollar(rampBonus);
             document.getElementById('cs-total').textContent = formatDollar(csBonus);
 
             const totalEarnings = baseSalary + rampBonus + totalCommissions + csBonus;
             document.getElementById('total-earnings').textContent = formatDollar(totalEarnings);
+
+            const totalActual = q2Actual + q3Actual + q4Actual;
+            document.getElementById('total-actual').textContent = formatDollar(totalActual);
+            document.getElementById('total-commissions').textContent = formatDollar(totalCommissions);
         }
 
-        // Initialize on load
         updateAll();
     </script>
 </body>
