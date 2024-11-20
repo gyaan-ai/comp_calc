@@ -157,4 +157,15 @@
             const includeCS = document.getElementById('cs-bonus').checked;
             const csBonus = includeCS ? variable * 0.25 : 0;
 
-            const totalEarnings = baseSalary + rampBonus + totalACV
+            const totalEarnings = baseSalary + rampBonus + totalACV + csBonus;
+            document.getElementById('summary-base-salary').textContent = formatDollar(baseSalary);
+            document.getElementById('ramp-bonus').textContent = formatDollar(rampBonus);
+            document.getElementById('cs-total').textContent = formatDollar(csBonus);
+            document.getElementById('total-earnings').textContent = formatDollar(totalEarnings);
+        }
+
+        // Initialize on load
+        updateAll();
+    </script>
+</body>
+</html>
