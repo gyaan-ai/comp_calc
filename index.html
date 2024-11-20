@@ -60,6 +60,10 @@
                     <div>$<span id="base-salary">90,000</span></div>
                     <div>Q1 Ramp Bonus (if achieved):</div>
                     <div>$<span id="ramp-bonus">7,500</span></div>
+                    <div>ACV Base Commission:</div>
+                    <div>$<span id="acv-base">0</span></div>
+                    <div>ACV Accelerator Commission:</div>
+                    <div>$<span id="acv-accelerator">0</span></div>
                     <div>Total ACV Commission:</div>
                     <div>$<span id="acv-total">0</span></div>
                     <div>CS Bonus (if achieved):</div>
@@ -105,17 +109,23 @@
 
             function calculateCommission(actual, goal) {
                 if (actual <= goal) {
-                    return actual * (commRate / 100);
+                    return { base: actual * (commRate / 100), accelerator: 0 };
                 }
-                return (goal * (commRate / 100)) + ((actual - goal) * (accRate / 100));
+                const base = goal * (commRate / 100);
+                const accelerator = (actual - goal) * (accRate / 100);
+                return { base, accelerator };
             }
 
             const q2Comm = calculateCommission(q2Actual, acvGoals.q2);
             const q3Comm = calculateCommission(q3Actual, acvGoals.q3);
             const q4Comm = calculateCommission(q4Actual, acvGoals.q4);
 
-            const totalACV = q2Comm + q3Comm + q4Comm;
-            document.getElementById('acv-total').textContent = totalACV.toFixed(2).toLocaleString();
+            const totalBase = q2Comm.base + q3Comm.base + q4Comm.base;
+            const totalAccelerator = q2Comm.accelerator + q3Comm.accelerator + q4Comm.accelerator;
+
+            document.getElementById('acv-base').textContent = totalBase.toFixed(2).toLocaleString();
+            document.getElementById('acv-accelerator').textContent = totalAccelerator.toFixed(2).toLocaleString();
+            document.getElementById('acv-total').textContent = (totalBase + totalAccelerator).toFixed(2).toLocaleString();
         }
 
         // Initialize calculations
