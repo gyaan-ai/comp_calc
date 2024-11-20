@@ -148,4 +148,27 @@
             const q4Comm = calculateCommission(q4Actual, 200000);
 
             document.getElementById('q2-comm').textContent = formatDollar(q2Comm);
-            document.getElementById('q3-comm').text
+            document.getElementById('q3-comm').textContent = formatDollar(q3Comm);
+            document.getElementById('q4-comm').textContent = formatDollar(q4Comm);
+
+            // Calculate Total Earnings Breakdown
+            const totalBaseComm = q2Comm + q3Comm + q4Comm;
+            const includeRamp = document.getElementById('q1-ramp').checked;
+            const rampBonus = includeRamp ? quarterlyVariable * 0.5 : 0;
+            const includeCS = document.getElementById('cs-bonus').checked;
+            const csBonus = includeCS ? variable * 0.25 : 0;
+
+            document.getElementById('summary-base-salary').textContent = formatDollar(baseSalary);
+            document.getElementById('ramp-bonus').textContent = formatDollar(rampBonus);
+            document.getElementById('acv-base').textContent = formatDollar(totalBaseComm);
+            document.getElementById('cs-total').textContent = formatDollar(csBonus);
+
+            const totalEarnings = baseSalary + rampBonus + totalBaseComm + csBonus;
+            document.getElementById('total-earnings').textContent = formatDollar(totalEarnings);
+        }
+
+        // Initialize on load
+        updateAll();
+    </script>
+</body>
+</html>
