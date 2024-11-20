@@ -12,9 +12,7 @@
             text-align: center;
         }
         .center-grid {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            text-align: center;
         }
     </style>
 </head>
@@ -27,9 +25,12 @@
                 <label class="block text-sm font-medium mb-1">Annual OTE ($)</label>
                 <input type="text" id="ote" class="w-1/2 border rounded p-2 text-center" value="150,000" oninput="formatAndUpdate('ote')">
             </div>
+            <div class="mt-4 grid grid-cols-3 gap-4 text-sm text-gray-600">
+                <div class="center-grid">Base Salary: $<span id="base-salary">90,000</span></div>
+                <div class="center-grid">Annual ACV Variable: $<span id="acv-variable">45,000</span></div>
+                <div class="center-grid">Annual CS Variable: $<span id="cs-variable">15,000</span></div>
+            </div>
             <div class="mt-4 grid grid-cols-2 gap-4 text-sm text-gray-600">
-                <div class="text-center">Annual Variable: $<span id="annual-variable">60,000</span></div>
-                <div class="text-center">Quarterly Variable: $<span id="quarterly-variable">15,000</span></div>
                 <div class="text-center">Base Commission Rate (BCR): <span id="comm-rate">9.0</span>%</div>
                 <div class="text-center">Accelerator Rate: <span id="acc-rate">13.5</span>%</div>
             </div>
@@ -59,28 +60,28 @@
             <div class="mt-4">
                 <h3 class="text-lg font-bold mb-2">Quarterly ACV Goals</h3>
                 <div class="grid grid-cols-4 gap-4 text-center font-bold">
-                    <div class="center-text">Quarter</div>
-                    <div class="center-text">Goal</div>
-                    <div class="center-text">Actual</div>
-                    <div class="center-text">Commissions</div>
+                    <div class="center-grid">Quarter</div>
+                    <div class="center-grid">Goal</div>
+                    <div class="center-grid">Actual</div>
+                    <div class="center-grid">Commissions</div>
                 </div>
                 <div class="grid grid-cols-4 gap-4 items-center">
-                    <div class="center-text">Q2</div>
-                    <div class="center-text">$<span id="q2-goal">0</span></div>
+                    <div class="center-grid">Q2</div>
+                    <div class="center-grid">$<span id="q2-goal">0</span></div>
                     <div><input type="number" id="q2-acv" class="w-full border rounded p-2" placeholder="ACV ($)" oninput="updateAll()"></div>
-                    <div class="center-text">$<span id="q2-comm">0</span></div>
+                    <div class="center-grid">$<span id="q2-comm">0</span></div>
                 </div>
                 <div class="grid grid-cols-4 gap-4 items-center">
-                    <div class="center-text">Q3</div>
-                    <div class="center-text">$<span id="q3-goal">0</span></div>
+                    <div class="center-grid">Q3</div>
+                    <div class="center-grid">$<span id="q3-goal">0</span></div>
                     <div><input type="number" id="q3-acv" class="w-full border rounded p-2" placeholder="ACV ($)" oninput="updateAll()"></div>
-                    <div class="center-text">$<span id="q3-comm">0</span></div>
+                    <div class="center-grid">$<span id="q3-comm">0</span></div>
                 </div>
                 <div class="grid grid-cols-4 gap-4 items-center">
-                    <div class="center-text">Q4</div>
-                    <div class="center-text">$<span id="q4-goal">0</span></div>
+                    <div class="center-grid">Q4</div>
+                    <div class="center-grid">$<span id="q4-goal">0</span></div>
                     <div><input type="number" id="q4-acv" class="w-full border rounded p-2" placeholder="ACV ($)" oninput="updateAll()"></div>
-                    <div class="center-text">$<span id="q4-comm">0</span></div>
+                    <div class="center-grid">$<span id="q4-comm">0</span></div>
                 </div>
             </div>
 
@@ -120,7 +121,13 @@
         function updateAll() {
             const ote = Number(document.getElementById('ote').value.replace(/,/g, "")) || 0;
             const baseSalary = ote * 0.6;
-            const variable = ote * 0.4;
+            const acvVariable = ote * 0.3;
+            const csVariable = ote * 0.1;
+
+            // Update Compensation Structure
+            document.getElementById('base-salary').textContent = formatDollar(baseSalary);
+            document.getElementById('acv-variable').textContent = formatDollar(acvVariable);
+            document.getElementById('cs-variable').textContent = formatDollar(csVariable);
 
             const annualTarget = Number(document.getElementById('annual-target').value.replace(/,/g, "")) || 0;
             const q2Goal = annualTarget * 0.25;
@@ -132,14 +139,14 @@
             document.getElementById('q3-goal').textContent = formatDollar(q3Goal);
             document.getElementById('q4-goal').textContent = formatDollar(q4Goal);
 
-            const commRate = ((variable * 0.75) / annualTarget) * 100;
+            const commRate = ((acvVariable) / annualTarget) * 100;
             const accRate = commRate * 1.5;
 
-            // Update Compensation Structure (BCR and Accelerator Rate)
+            // Update BCR and Accelerator Rate
             document.getElementById('comm-rate').textContent = commRate.toFixed(1);
             document.getElementById('acc-rate').textContent = accRate.toFixed(1);
 
-            // Update Quarterly ACV Commissions
+            // Commissions Calculation
             const q2Actual = Number(document.getElementById('q2-acv').value) || 0;
             const q3Actual = Number(document.getElementById('q3-acv').value) || 0;
             const q4Actual = Number(document.getElementById('q4-acv').value) || 0;
@@ -165,8 +172,8 @@
             const totalBaseComm = q2Comm + q3Comm + q4Comm;
             document.getElementById('summary-base-salary').textContent = formatDollar(baseSalary);
 
-            const rampBonus = document.getElementById('q1-ramp').checked ? variable * 0.125 : 0;
-            const csBonus = document.getElementById('cs-bonus').checked ? variable * 0.25 : 0;
+            const rampBonus = document.getElementById('q1-ramp').checked ? acvVariable * 0.125 : 0;
+            const csBonus = document.getElementById('cs-bonus').checked ? csVariable : 0;
 
             document.getElementById('ramp-bonus').textContent = formatDollar(rampBonus);
             document.getElementById('cs-total').textContent = formatDollar(csBonus);
