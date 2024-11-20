@@ -4,7 +4,7 @@
     <title>Sales Comp Calculator</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 p-6" onload="updateAll()">
+<body class="bg-gray-100 p-6">
     <div class="max-w-4xl mx-auto space-y-6">
         <!-- OTE Section -->
         <div class="bg-white rounded-lg shadow p-6">
@@ -16,7 +16,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1">Base Salary (60% of OTE)</label>
-                    <input type="number" id="base-salary" class="w-full border rounded p-2 bg-gray-100" readonly>
+                    <input type="number" id="base-salary" class="w-full border rounded p-2 bg-gray-100" value="90000" readonly>
                 </div>
                 <div class="col-span-2">
                     <div class="grid grid-cols-2 gap-4 text-sm text-gray-600">
@@ -61,7 +61,7 @@
                         <div>CS Bonus (if achieved):</div>
                         <div>$<span id="what-if-cs-amount">15,000</span></div>
                         <div class="font-bold">Total Potential Earnings:</div>
-                        <div class="font-bold">$<span id="what-if-total">150,000</span></div>
+                        <div class="font-bold">$<span id="what-if-total">157,500</span></div>
                     </div>
                 </div>
             </div>
@@ -163,25 +163,38 @@
     </div>
 
     <script>
-        // Add event listeners
-        document.getElementById('ote').addEventListener('input', updateAll);
-        document.getElementById('what-if-bookings').addEventListener('input', updateAll);
-        document.getElementById('what-if-ramp').addEventListener('change', updateAll);
-        document.getElementById('what-if-cs').addEventListener('change', updateAll);
-
-        // Add event listeners for Q1 Ramp inputs
-        ['m1-meetings', 'm2-meetings', 'm3-meetings', 'm1-pipeline', 'm2-pipeline', 'm3-pipeline'].forEach(id => {
-            document.getElementById(id).addEventListener('input', updateAll);
+        // Initialize calculations when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAll();
         });
 
-        // Add event listeners for ACV inputs
-        ['q2-actual', 'q3-actual', 'q4-actual'].forEach(id => {
-            document.getElementById(id).addEventListener('input', updateAll);
-        });
+        // Add event listeners for all inputs
+        document.addEventListener('DOMContentLoaded', function() {
+            // OTE and What-If Calculator
+            ['ote', 'what-if-bookings'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updateAll);
+            });
 
-        // Add event listeners for CS inputs
-        ['cs-impl', 'cs-usage'].forEach(id => {
-            document.getElementById(id).addEventListener('input', updateAll);
+            // Checkboxes
+            ['what-if-ramp', 'what-if-cs'].forEach(id => {
+                document.getElementById(id).addEventListener('change', updateAll);
+            });
+
+            // Q1 Ramp inputs
+            ['m1-meetings', 'm2-meetings', 'm3-meetings', 
+             'm1-pipeline', 'm2-pipeline', 'm3-pipeline'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updateAll);
+            });
+
+            // ACV inputs
+            ['q2-actual', 'q3-actual', 'q4-actual'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updateAll);
+            });
+
+            // CS inputs
+            ['cs-impl', 'cs-usage'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updateAll);
+            });
         });
 
         function updateAll() {
@@ -190,41 +203,37 @@
             const variable = ote * 0.4;
             const quarterlyVariable = variable / 4;
 
-            // Update Compensation Structure section
+            updateCompStructure(ote, baseSalary, variable, quarterlyVariable);
+            updateWhatIfCalculator();
+            updateRampCalculations();
+            updateACVCalculations();
+            updateCSCalculations();
+            updateTotalCompensation();
+        }
+
+        function updateCompStructure(ote, baseSalary, variable, quarterlyVariable) {
             document.getElementById('base-salary').value = baseSalary;
             document.getElementById('variable').textContent = variable.toLocaleString();
             document.getElementById('quarterly-variable').textContent = quarterlyVariable.toLocaleString();
             
-            // Update commission rates
             const baseCommRate = ((variable * 0.75) / 500000) * 100;
             const accRate = baseCommRate * 1.5;
             document.getElementById('comm-rate').textContent = baseCommRate.toFixed(1);
             document.getElementById('acc-rate').textContent = accRate.toFixed(1);
-
-            // Update What-If Calculator
-            updateWhatIfCalculator(ote, baseSalary, variable, quarterlyVariable);
-
-            // Update Q1 Ramp calculations
-            updateRampCalculations(quarterlyVariable);
-
-            // Update ACV calculations
-            updateACVCalculations(baseCommRate, accRate);
-
-            // Update CS calculations
-            updateCSCalculations(variable);
-
-            // Update total compensation
-            updateTotalCompensation(baseSalary);
         }
 
-        function updateWhatIfCalculator(ote, baseSalary, variable, quarterlyVariable) {
+        function updateWhatIfCalculator() {
+            const ote = Number(document.getElementById('ote').value);
+            const baseSalary = ote * 0.6;
+            const variable = ote * 0.4;
+            const quarterlyVariable = variable / 4;
             const bookings = Number(document.getElementById('what-if-bookings').value);
             const includeRamp = document.getElementById('what-if-ramp').checked;
             const includeCS = document.getElementById('what-if-cs').checked;
 
-            // Calculate ACV Commission
             const baseCommRate = Number(document.getElementById('comm-rate').textContent) / 100;
             const accRate = Number(document.getElementById('acc-rate').textContent) / 100;
+
             let acvComm = 0;
             if (bookings <= 500000) {
                 acvComm = bookings * baseCommRate;
@@ -232,32 +241,27 @@
                 acvComm = (500000 * baseCommRate) + ((bookings - 500000) * accRate);
             }
 
-            // Calculate components
             const rampAmount = includeRamp ? (quarterlyVariable * 0.5) : 0;
             const csAmount = includeCS ? (variable * 0.25) : 0;
-            
-            // Update displays
+
             document.getElementById('what-if-base').textContent = baseSalary.toLocaleString();
             document.getElementById('what-if-ramp-amount').textContent = rampAmount.toLocaleString();
             document.getElementById('what-if-acv').textContent = Math.round(acvComm).toLocaleString();
             document.getElementById('what-if-cs-amount').textContent = csAmount.toLocaleString();
-            
-            // Calculate and update total
+
             const total = baseSalary + rampAmount + acvComm + csAmount;
             document.getElementById('what-if-total').textContent = Math.round(total).toLocaleString();
         }
 
-        function updateRampCalculations(quarterlyVariable) {
-            // Activity achievement
+        function updateRampCalculations() {
+            const ote = Number(document.getElementById('ote').value);
+            const quarterlyVariable = (ote * 0.4) / 4;
+            const rampTarget = quarterlyVariable * 0.5;
+
             const m1MeetingsAch = Math.min(Number(document.getElementById('m1-meetings').value) / 6, 1);
             const m2MeetingsAch = Math.min(Number(document.getElementById('m2-meetings').value) / 8, 1);
             const m3MeetingsAch = Math.min(Number(document.getElementById('m3-meetings').value) / 10, 1);
             const activityAch = ((m1MeetingsAch + m2MeetingsAch + m3MeetingsAch) / 3) * 100;
-            
-            // Pipeline achievement
+
             const m2PipelineAch = Math.min(Number(document.getElementById('m2-pipeline').value) / 100000, 1);
-            const m3PipelineAch = Math.min(Number(document.getElementById('m3-pipeline').value) / 200000, 1);
-            const pipelineAch = ((m2PipelineAch + m3PipelineAch) / 2) * 100;
-            
-            // Update displays
-            document.getElementById('activity-achievement').textContent = activityAch.toFixed(1);
+            const m3PipelineAch = Math.min(Number(document.getElementById('m3
