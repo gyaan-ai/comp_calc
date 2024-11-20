@@ -63,7 +63,7 @@
                     <div class="center-grid">Quarter</div>
                     <div class="center-grid">Goal</div>
                     <div class="center-grid">Actual</div>
-                    <div class="center-grid">Progress</div>
+                    <div class="center-grid">Commissions</div>
                 </div>
                 <div class="grid grid-cols-4 gap-4 items-center">
                     <div class="center-grid">Q2</div>
@@ -71,14 +71,7 @@
                     <div>
                         <input type="text" id="q2-acv" class="w-full border rounded p-2 text-center" placeholder="ACV ($)" oninput="formatAndUpdate('q2-acv')">
                     </div>
-                    <div class="center-grid">
-                        <div class="relative pt-1">
-                            <div class="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
-                                <div id="q2-progress" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500" style="width: 0%;"></div>
-                            </div>
-                            <div class="text-sm font-medium mt-1" id="q2-progress-label">0%</div>
-                        </div>
-                    </div>
+                    <div class="center-grid">$<span id="q2-comm">0</span></div>
                 </div>
                 <div class="grid grid-cols-4 gap-4 items-center">
                     <div class="center-grid">Q3</div>
@@ -86,14 +79,7 @@
                     <div>
                         <input type="text" id="q3-acv" class="w-full border rounded p-2 text-center" placeholder="ACV ($)" oninput="formatAndUpdate('q3-acv')">
                     </div>
-                    <div class="center-grid">
-                        <div class="relative pt-1">
-                            <div class="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
-                                <div id="q3-progress" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500" style="width: 0%;"></div>
-                            </div>
-                            <div class="text-sm font-medium mt-1" id="q3-progress-label">0%</div>
-                        </div>
-                    </div>
+                    <div class="center-grid">$<span id="q3-comm">0</span></div>
                 </div>
                 <div class="grid grid-cols-4 gap-4 items-center">
                     <div class="center-grid">Q4</div>
@@ -101,14 +87,32 @@
                     <div>
                         <input type="text" id="q4-acv" class="w-full border rounded p-2 text-center" placeholder="ACV ($)" oninput="formatAndUpdate('q4-acv')">
                     </div>
-                    <div class="center-grid">
-                        <div class="relative pt-1">
-                            <div class="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
-                                <div id="q4-progress" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500" style="width: 0%;"></div>
-                            </div>
-                            <div class="text-sm font-medium mt-1" id="q4-progress-label">0%</div>
-                        </div>
-                    </div>
+                    <div class="center-grid">$<span id="q4-comm">0</span></div>
+                </div>
+                <div class="grid grid-cols-4 gap-4 font-bold mt-4">
+                    <div class="center-grid">Total</div>
+                    <div class="center-grid">—</div>
+                    <div class="center-grid">$<span id="total-actual">0</span></div>
+                    <div class="center-grid">$<span id="total-commissions">0</span></div>
+                </div>
+            </div>
+
+            <!-- Summary Breakdown -->
+            <div class="mt-6 bg-gray-50 p-4 rounded">
+                <h3 class="font-bold mb-2">Earnings Breakdown:</h3>
+                <div class="grid grid-cols-2 gap-2 text-sm">
+                    <div>Base Salary:</div>
+                    <div>$<span id="summary-base-salary">0</span></div>
+                    <div>Q1 Ramp Bonus (if achieved):</div>
+                    <div>$<span id="ramp-bonus">0</span></div>
+                    <div>ACV Base Commission:</div>
+                    <div>$<span id="acv-base">0</span></div>
+                    <div>ACV Accelerator Commission:</div>
+                    <div>$<span id="acv-accelerator">0</span></div>
+                    <div>CS Bonus (if achieved):</div>
+                    <div>$<span id="cs-total">0</span></div>
+                    <div class="font-bold">Total Potential Earnings:</div>
+                    <div class="font-bold">$<span id="total-earnings">0</span></div>
                 </div>
             </div>
         </div>
@@ -145,21 +149,53 @@
             document.getElementById('q3-goal').textContent = formatDollar(q3Goal);
             document.getElementById('q4-goal').textContent = formatDollar(q4Goal);
 
+            const commRate = (acvVariable / annualTarget) * 100;
+            const accRate = commRate * 1.5;
+
+            document.getElementById('comm-rate').textContent = commRate.toFixed(1);
+            document.getElementById('acc-rate').textContent = accRate.toFixed(1);
+
             const q2Actual = Number(document.getElementById('q2-acv').value.replace(/,/g, "")) || 0;
             const q3Actual = Number(document.getElementById('q3-acv').value.replace(/,/g, "")) || 0;
             const q4Actual = Number(document.getElementById('q4-acv').value.replace(/,/g, "")) || 0;
 
-            const q2Progress = Math.min((q2Actual / q2Goal) * 100, 150);
-            const q3Progress = Math.min((q3Actual / q3Goal) * 100, 150);
-            const q4Progress = Math.min((q4Actual / q4Goal) * 100, 150);
+            function calculateCommission(actual, goal) {
+                if (actual <= goal) {
+                    return actual * (commRate / 100);
+                }
+                const base = goal * (commRate / 100);
+                const accelerator = (actual - goal) * (accRate / 100);
+                return { base, accelerator, total: base + accelerator };
+            }
 
-            document.getElementById('q2-progress').style.width = `${q2Progress}%`;
-            document.getElementById('q3-progress').style.width = `${q3Progress}%`;
-            document.getElementById('q4-progress').style.width = `${q4Progress}%`;
+            const q2Comm = calculateCommission(q2Actual, q2Goal);
+            const q3Comm = calculateCommission(q3Actual, q3Goal);
+            const q4Comm = calculateCommission(q4Actual, q4Goal);
 
-            document.getElementById('q2-progress-label').textContent = `${Math.round(q2Progress)}%`;
-            document.getElementById('q3-progress-label').textContent = `${Math.round(q3Progress)}%`;
-            document.getElementById('q4-progress-label').textContent = `${Math.round(q4Progress)}%`;
+            document.getElementById('q2-comm').textContent = formatDollar(q2Comm.total);
+            document.getElementById('q3-comm').textContent = formatDollar(q3Comm.total);
+            document.getElementById('q4-comm').textContent = formatDollar(q4Comm.total);
+
+            const totalBaseComm = q2Comm.base + q3Comm.base + q4Comm.base;
+            const totalAcceleratorComm = q2Comm.accelerator + q3Comm.accelerator + q4Comm.accelerator;
+            const totalCommissions = totalBaseComm + totalAcceleratorComm;
+
+            document.getElementById('acv-base').textContent = formatDollar(totalBaseComm);
+            document.getElementById('acv-accelerator').textContent = formatDollar(totalAcceleratorComm);
+
+            const rampBonus = document.getElementById('q1-ramp').checked ? acvVariable * 0.125 : 0;
+            const csBonus = document.getElementById('cs-bonus').checked ? csVariable : 0;
+
+            document.getElementById('summary-base-salary').textContent = formatDollar(baseSalary);
+            document.getElementById('ramp-bonus').textContent = formatDollar(rampBonus);
+            document.getElementById('cs-total').textContent = formatDollar(csBonus);
+
+            const totalEarnings = baseSalary + rampBonus + totalCommissions + csBonus;
+            document.getElementById('total-earnings').textContent = formatDollar(totalEarnings);
+
+            const totalActual = q2Actual + q3Actual + q4Actual;
+            document.getElementById('total-actual').textContent = formatDollar(totalActual);
+            document.getElementById('total-commissions').textContent = formatDollar(totalCommissions);
         }
 
         updateAll();
