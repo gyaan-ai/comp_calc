@@ -22,8 +22,8 @@
                     <div class="grid grid-cols-2 gap-4 text-sm text-gray-600">
                         <div>Annual Variable: $<span id="variable">60000</span></div>
                         <div>Quarterly Variable: $<span id="quarterly-variable">15000</span></div>
-                        <div>Base Commission Rate: <span id="comm-rate">9.0</span>%</div>
-                        <div>Accelerator Rate: <span id="acc-rate">13.5</span>%</div>
+                        <div>ACV Allocation (75% of Variable): $<span id="acv-allocation">45000</span></div>
+                        <div>CS Allocation (25% of Variable): $<span id="cs-allocation">15000</span></div>
                     </div>
                 </div>
             </div>
@@ -44,10 +44,14 @@
                     <div class="grid grid-cols-2 gap-2 text-sm">
                         <div>Base Salary:</div>
                         <div>$<span id="earnings-base">90,000</span></div>
+                        <div>Q1 Ramp Commission:</div>
+                        <div>$<span id="earnings-ramp">7,500</span></div>
                         <div>ACV Commission:</div>
                         <div>$<span id="earnings-acv">45,000</span></div>
+                        <div>CS Bonus:</div>
+                        <div>$<span id="earnings-cs">15,000</span></div>
                         <div class="font-bold">Total Potential Earnings:</div>
-                        <div class="font-bold">$<span id="earnings-total">135,000</span></div>
+                        <div class="font-bold">$<span id="earnings-total">157,500</span></div>
                     </div>
                 </div>
             </div>
@@ -63,7 +67,7 @@
             const quarterlyVariable = calculateQuarterlyVariable(variable);
 
             updateCompensationStructure(baseSalary, variable, quarterlyVariable);
-            updateEarningsCalculator(baseSalary, variable);
+            updateEarningsCalculator(baseSalary, variable, quarterlyVariable);
         }
 
         // Calculation Helpers
@@ -79,8 +83,14 @@
             return variable / 4;
         }
 
-        function calculateCommissionRate(variable, target) {
-            return ((variable * 0.75) / target) * 100;
+        function calculateRampPayout(variable, activityAch, pipelineAch) {
+            const rampTarget = variable * 0.5;
+            return (rampTarget * (activityAch / 100)) + (rampTarget * (pipelineAch / 100));
+        }
+
+        function calculateCustomerSuccessBonus(csAllocation, implementationAch, featureUsageAch) {
+            const combinedAch = (implementationAch + featureUsageAch) / 2;
+            return (csAllocation * combinedAch) / 100;
         }
 
         // Update DOM Elements
@@ -88,28 +98,25 @@
             document.getElementById('base-salary').value = base.toLocaleString();
             document.getElementById('variable').textContent = variable.toLocaleString();
             document.getElementById('quarterly-variable').textContent = quarterly.toLocaleString();
-
-            const commRate = calculateCommissionRate(variable, 500000);
-            const accRate = commRate * 1.5;
-            document.getElementById('comm-rate').textContent = commRate.toFixed(1);
-            document.getElementById('acc-rate').textContent = accRate.toFixed(1);
+            document.getElementById('acv-allocation').textContent = (variable * 0.75).toLocaleString();
+            document.getElementById('cs-allocation').textContent = (variable * 0.25).toLocaleString();
         }
 
-        function updateEarningsCalculator(base, variable) {
-            const bookings = Number(document.getElementById('bookings').value) || 0;
-            const commRate = calculateCommissionRate(variable, 500000);
-            const accRate = commRate * 1.5;
+        function updateEarningsCalculator(base, variable, quarterly) {
+            // Mock Data for Activity and Pipeline Achievement (replace with actual inputs)
+            const activityAch = 100; // 100% activity goals achieved
+            const pipelineAch = 100; // 100% pipeline goals achieved
+            const implementationAch = 100; // 100% implementation goals achieved
+            const featureUsageAch = 100; // 100% feature usage goals achieved
 
-            let acvCommission = 0;
-            if (bookings <= 500000) {
-                acvCommission = bookings * (commRate / 100);
-            } else {
-                acvCommission = (500000 * (commRate / 100)) + ((bookings - 500000) * (accRate / 100));
-            }
+            const rampPayout = calculateRampPayout(quarterly, activityAch, pipelineAch);
+            const csBonus = calculateCustomerSuccessBonus(variable * 0.25, implementationAch, featureUsageAch);
 
             document.getElementById('earnings-base').textContent = base.toLocaleString();
-            document.getElementById('earnings-acv').textContent = Math.round(acvCommission).toLocaleString();
-            document.getElementById('earnings-total').textContent = Math.round(base + acvCommission).toLocaleString();
+            document.getElementById('earnings-ramp').textContent = Math.round(rampPayout).toLocaleString();
+            document.getElementById('earnings-acv').textContent = (variable * 0.75).toLocaleString();
+            document.getElementById('earnings-cs').textContent = Math.round(csBonus).toLocaleString();
+            document.getElementById('earnings-total').textContent = Math.round(base + rampPayout + variable + csBonus).toLocaleString();
         }
 
         // Initialize with default values
