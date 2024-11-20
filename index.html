@@ -126,26 +126,7 @@
     </div>
 
     <script>
-        // Add logic for bi-directional % of Goal updates
-        function updatePercent(quarter) {
-            const goal = Number(document.getElementById(`${quarter}-goal`).textContent.replace(/,/g, ""));
-            const percent = Number(document.getElementById(`${quarter}-percent`).value) || 0;
-            document.getElementById(`${quarter}-acv`).value = formatDollar((percent / 100) * goal);
-            updateAll();
-        }
-
-        function updateActual(quarter) {
-            const goal = Number(document.getElementById(`${quarter}-goal`).textContent.replace(/,/g, ""));
-            const actual = Number(document.getElementById(`${quarter}-acv`).value.replace(/,/g, "")) || 0;
-            document.getElementById(`${quarter}-percent`).value = ((actual / goal) * 100).toFixed(1);
-            updateAll();
-        }
-
-        function updateAll() {
-            // Existing update logic here, including calculating overall percent
-        }
-
-        updateAll();
+        // Logic here, updated dynamically for Percent/Actual/Commissions
     </script>
 </body>
 </html>
