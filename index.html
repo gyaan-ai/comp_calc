@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CRO Compensation Calculator</title>
+    <title>Earnings Calculator & ACV Goals</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
         .center-content {
@@ -20,57 +20,80 @@
     <div class="max-w-4xl mx-auto space-y-6">
         <!-- Compensation Structure Section -->
         <div class="bg-white rounded-lg shadow p-6 center-content">
-            <h2 class="text-xl font-bold mb-4">CRO Compensation Structure</h2>
+            <h2 class="text-xl font-bold mb-4">Compensation Structure</h2>
             <div class="center-content">
                 <label class="block text-sm font-medium mb-1">Annual OTE ($)</label>
-                <input type="text" id="cro-ote" class="w-1/2 border rounded p-2 text-center" value="225,000" oninput="formatAndUpdateCRO('cro-ote')">
+                <input type="text" id="ote" class="w-1/2 border rounded p-2 text-center" value="150,000" oninput="formatAndUpdate('ote')">
             </div>
             <div class="mt-4 grid grid-cols-3 gap-4 text-sm text-gray-600">
-                <div class="center-grid">Base Salary: $<span id="cro-base-salary">120,000</span></div>
-                <div class="center-grid">Variable Incentive: $<span id="cro-variable">80,000</span></div>
-                <div class="center-grid">Annual Bonus: $<span id="cro-bonus">25,000</span></div>
+                <div class="center-grid">Base Salary: $<span id="base-salary">90,000</span></div>
+                <div class="center-grid">Annual ACV Variable: $<span id="acv-variable">45,000</span></div>
+                <div class="center-grid">Annual CS Variable: $<span id="cs-variable">15,000</span></div>
             </div>
             <div class="mt-4 grid grid-cols-2 gap-4 text-sm text-gray-600">
-                <div class="text-center">Commission Rate: <span id="cro-comm-rate">10</span>%</div>
-                <div class="text-center">Accelerator Rate: <span id="cro-acc-rate">15</span>%</div>
+                <div class="text-center">Base Commission Rate (BCR): <span id="comm-rate">9.0</span>%</div>
+                <div class="text-center">Accelerator Rate: <span id="acc-rate">13.5</span>%</div>
             </div>
         </div>
 
-        <!-- Earnings Calculator Section -->
+        <!-- Earnings Calculator & ACV Goals Section -->
         <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-xl font-bold mb-4">Earnings Calculator</h2>
+            <h2 class="text-xl font-bold mb-4">Earnings Calculator & ACV Goals</h2>
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-sm font-medium mb-1">Annual ARR Target ($)</label>
-                    <input type="text" id="arr-target" class="w-full border rounded p-2" value="1,500,000" oninput="formatAndUpdateCRO('arr-target')">
+                    <label class="block text-sm font-medium mb-1">Annual Bookings Target ($)</label>
+                    <input type="text" id="annual-target" class="w-full border rounded p-2" value="1,500,000" oninput="formatAndUpdate('annual-target')">
                 </div>
                 <div class="grid grid-cols-2 gap-4 items-center">
                     <div>
                         <label class="block text-sm font-medium mb-1">Include Q1 Ramp</label>
-                        <input type="checkbox" id="cro-q1-ramp" checked onclick="updateCRO()">
+                        <input type="checkbox" id="q1-ramp" checked onclick="updateAll()">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium mb-1">Include Bonus</label>
-                        <input type="checkbox" id="cro-bonus-include" checked onclick="updateCRO()">
+                        <label class="block text-sm font-medium mb-1">Include CS Bonus</label>
+                        <input type="checkbox" id="cs-bonus" checked onclick="updateAll()">
                     </div>
                 </div>
             </div>
 
-            <!-- Quarterly Goals -->
+            <!-- Quarterly ACV Goals -->
             <div class="mt-4">
-                <h3 class="text-lg font-bold mb-2">Quarterly ARR Goals</h3>
+                <h3 class="text-lg font-bold mb-2">Quarterly ACV Goals</h3>
                 <div class="grid grid-cols-4 gap-4 text-center font-bold">
                     <div class="center-grid">Quarter</div>
                     <div class="center-grid">Goal</div>
                     <div class="center-grid">Actual</div>
                     <div class="center-grid">Commissions</div>
                 </div>
-                <div id="quarters-container"></div>
+                <div class="grid grid-cols-4 gap-4 items-center">
+                    <div class="center-grid">Q2</div>
+                    <div class="center-grid">$<span id="q2-goal">125,000</span></div>
+                    <div>
+                        <input type="text" id="q2-acv" class="w-full border rounded p-2 text-center" placeholder="ACV ($)" oninput="formatAndUpdate('q2-acv')">
+                    </div>
+                    <div class="center-grid">$<span id="q2-comm">0</span></div>
+                </div>
+                <div class="grid grid-cols-4 gap-4 items-center">
+                    <div class="center-grid">Q3</div>
+                    <div class="center-grid">$<span id="q3-goal">175,000</span></div>
+                    <div>
+                        <input type="text" id="q3-acv" class="w-full border rounded p-2 text-center" placeholder="ACV ($)" oninput="formatAndUpdate('q3-acv')">
+                    </div>
+                    <div class="center-grid">$<span id="q3-comm">0</span></div>
+                </div>
+                <div class="grid grid-cols-4 gap-4 items-center">
+                    <div class="center-grid">Q4</div>
+                    <div class="center-grid">$<span id="q4-goal">200,000</span></div>
+                    <div>
+                        <input type="text" id="q4-acv" class="w-full border rounded p-2 text-center" placeholder="ACV ($)" oninput="formatAndUpdate('q4-acv')">
+                    </div>
+                    <div class="center-grid">$<span id="q4-comm">0</span></div>
+                </div>
                 <div class="grid grid-cols-4 gap-4 font-bold mt-4">
                     <div class="center-grid">Total</div>
-                    <div class="center-grid">$<span id="cro-total-goal">500,000</span></div>
-                    <div class="center-grid">$<span id="cro-total-actual">0</span></div>
-                    <div class="center-grid">$<span id="cro-total-commissions">0</span></div>
+                    <div class="center-grid">$<span id="total-goal">500,000</span></div>
+                    <div class="center-grid">$<span id="total-actual">0</span></div>
+                    <div class="center-grid">$<span id="total-commissions">0</span></div>
                 </div>
             </div>
 
@@ -79,17 +102,17 @@
                 <h3 class="font-bold mb-2">Earnings Breakdown:</h3>
                 <div class="grid grid-cols-2 gap-2 text-sm">
                     <div>Base Salary:</div>
-                    <div>$<span id="cro-summary-base-salary">0</span></div>
+                    <div>$<span id="summary-base-salary">0</span></div>
                     <div>Q1 Ramp Bonus (if achieved):</div>
-                    <div>$<span id="cro-ramp-bonus">0</span></div>
-                    <div>ARR Base Commission:</div>
-                    <div>$<span id="cro-arr-base">0</span></div>
-                    <div>ARR Accelerator Commission:</div>
-                    <div>$<span id="cro-arr-accelerator">0</span></div>
-                    <div>Bonus (if included):</div>
-                    <div>$<span id="cro-total-bonus">0</span></div>
+                    <div>$<span id="ramp-bonus">0</span></div>
+                    <div>ACV Base Commission:</div>
+                    <div>$<span id="acv-base">0</span></div>
+                    <div>ACV Accelerator Commission:</div>
+                    <div>$<span id="acv-accelerator">0</span></div>
+                    <div>CS Bonus (if achieved):</div>
+                    <div>$<span id="cs-total">0</span></div>
                     <div class="font-bold">Total Potential Earnings:</div>
-                    <div class="font-bold">$<span id="cro-total-earnings">0</span></div>
+                    <div class="font-bold">$<span id="total-earnings">0</span></div>
                 </div>
             </div>
         </div>
@@ -100,29 +123,82 @@
             return value.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
         }
 
-        function formatAndUpdateCRO(id) {
+        function formatAndUpdate(id) {
             const input = document.getElementById(id);
             const value = input.value.replace(/,/g, "");
             input.value = formatDollar(Number(value) || 0);
-            updateCRO();
+            updateAll();
         }
 
-        function updateCRO() {
-            const croOTE = Number(document.getElementById('cro-ote').value.replace(/,/g, "")) || 0;
-            const baseSalary = croOTE * 0.533;
-            const variable = croOTE * 0.356;
-            const bonus = croOTE * 0.111;
+        function updateAll() {
+            const ote = Number(document.getElementById('ote').value.replace(/,/g, "")) || 0;
+            const baseSalary = ote * 0.6;
+            const acvVariable = ote * 0.3;
+            const csVariable = ote * 0.1;
 
-            // Populate Compensation Structure
-            document.getElementById('cro-base-salary').textContent = formatDollar(baseSalary);
-            document.getElementById('cro-variable').textContent = formatDollar(variable);
-            document.getElementById('cro-bonus').textContent = formatDollar(bonus);
+            const annualTarget = Number(document.getElementById('annual-target').value.replace(/,/g, "")) || 0;
+            const bcr = ((acvVariable / annualTarget) * 100).toFixed(1);
+            const accRate = (bcr * 1.5).toFixed(1);
 
-            // Calculate commissions, ramp, and bonus inclusion logic
-            // TODO: Implement remaining logic
+            // Update Compensation Structure
+            document.getElementById('base-salary').textContent = formatDollar(baseSalary);
+            document.getElementById('acv-variable').textContent = formatDollar(acvVariable);
+            document.getElementById('cs-variable').textContent = formatDollar(csVariable);
+            document.getElementById('comm-rate').textContent = bcr;
+            document.getElementById('acc-rate').textContent = accRate;
+
+            // Calculate Quarterly Goals
+            const q2Goal = annualTarget * 0.25;
+            const q3Goal = annualTarget * 0.35;
+            const q4Goal = annualTarget * 0.40;
+
+            document.getElementById('q2-goal').textContent = formatDollar(q2Goal);
+            document.getElementById('q3-goal').textContent = formatDollar(q3Goal);
+            document.getElementById('q4-goal').textContent = formatDollar(q4Goal);
+
+            // Calculate Actuals and Commissions
+            const q2Actual = Number(document.getElementById('q2-acv').value.replace(/,/g, "")) || 0;
+            const q3Actual = Number(document.getElementById('q3-acv').value.replace(/,/g, "")) || 0;
+            const q4Actual = Number(document.getElementById('q4-acv').value.replace(/,/g, "")) || 0;
+
+            function calculateCommission(actual, goal) {
+                const base = Math.min(actual, goal) * (bcr / 100);
+                const accelerator = Math.max(0, actual - goal) * (accRate / 100);
+                return { base, accelerator, total: base + accelerator };
+            }
+
+            const q2Comm = calculateCommission(q2Actual, q2Goal);
+            const q3Comm = calculateCommission(q3Actual, q3Goal);
+            const q4Comm = calculateCommission(q4Actual, q4Goal);
+
+            document.getElementById('q2-comm').textContent = formatDollar(q2Comm.total);
+            document.getElementById('q3-comm').textContent = formatDollar(q3Comm.total);
+            document.getElementById('q4-comm').textContent = formatDollar(q4Comm.total);
+
+            const totalActual = q2Actual + q3Actual + q4Actual;
+            const totalCommissions = q2Comm.total + q3Comm.total + q4Comm.total;
+
+            document.getElementById('total-actual').textContent = formatDollar(totalActual);
+            document.getElementById('total-commissions').textContent = formatDollar(totalCommissions);
+
+            // Earnings Breakdown
+            const rampBonus = document.getElementById('q1-ramp').checked ? acvVariable * 0.125 : 0;
+            const csBonus = document.getElementById('cs-bonus').checked ? csVariable : 0;
+
+            const totalBaseComm = q2Comm.base + q3Comm.base + q4Comm.base;
+            const totalAcceleratorComm = q2Comm.accelerator + q3Comm.accelerator + q4Comm.accelerator;
+
+            document.getElementById('summary-base-salary').textContent = formatDollar(baseSalary);
+            document.getElementById('acv-base').textContent = formatDollar(totalBaseComm);
+            document.getElementById('acv-accelerator').textContent = formatDollar(totalAcceleratorComm);
+            document.getElementById('ramp-bonus').textContent = formatDollar(rampBonus);
+            document.getElementById('cs-total').textContent = formatDollar(csBonus);
+
+            const totalEarnings = baseSalary + rampBonus + totalCommissions + csBonus;
+            document.getElementById('total-earnings').textContent = formatDollar(totalEarnings);
         }
 
-        updateCRO();
+        updateAll();
     </script>
 </body>
 </html>
