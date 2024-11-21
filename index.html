@@ -156,16 +156,14 @@
             document.getElementById('q3-goal').textContent = formatDollar(q3Goal);
             document.getElementById('q4-goal').textContent = formatDollar(q4Goal);
 
+            // Calculate Actuals and Commissions
             const q2Actual = Number(document.getElementById('q2-acv').value.replace(/,/g, "")) || 0;
             const q3Actual = Number(document.getElementById('q3-acv').value.replace(/,/g, "")) || 0;
             const q4Actual = Number(document.getElementById('q4-acv').value.replace(/,/g, "")) || 0;
 
             function calculateCommission(actual, goal) {
-                if (actual <= goal) {
-                    return actual * (bcr / 100);
-                }
-                const base = goal * (bcr / 100);
-                const accelerator = (actual - goal) * (accRate / 100);
+                const base = Math.min(actual, goal) * (bcr / 100);
+                const accelerator = Math.max(0, actual - goal) * (accRate / 100);
                 return { base, accelerator, total: base + accelerator };
             }
 
@@ -184,11 +182,11 @@
             document.getElementById('total-commissions').textContent = formatDollar(totalCommissions);
 
             // Earnings Breakdown
-            const totalBaseComm = q2Comm.base + q3Comm.base + q4Comm.base;
-            const totalAcceleratorComm = q2Comm.accelerator + q3Comm.accelerator + q4Comm.accelerator;
-
             const rampBonus = document.getElementById('q1-ramp').checked ? acvVariable * 0.125 : 0;
             const csBonus = document.getElementById('cs-bonus').checked ? csVariable : 0;
+
+            const totalBaseComm = q2Comm.base + q3Comm.base + q4Comm.base;
+            const totalAcceleratorComm = q2Comm.accelerator + q3Comm.accelerator + q4Comm.accelerator;
 
             document.getElementById('summary-base-salary').textContent = formatDollar(baseSalary);
             document.getElementById('acv-base').textContent = formatDollar(totalBaseComm);
