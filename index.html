@@ -102,15 +102,15 @@
                 <h3 class="font-bold mb-2">Earnings Breakdown:</h3>
                 <div class="grid grid-cols-2 gap-2 text-sm">
                     <div>Base Salary:</div>
-                    <div>$<span id="summary-base-salary">90,000</span></div>
+                    <div>$<span id="summary-base-salary">0</span></div>
                     <div>Q1 Ramp Bonus (if achieved):</div>
-                    <div>$<span id="ramp-bonus">5,000</span></div>
+                    <div>$<span id="ramp-bonus">0</span></div>
                     <div>ACV Base Commission:</div>
                     <div>$<span id="acv-base">0</span></div>
                     <div>ACV Accelerator Commission:</div>
                     <div>$<span id="acv-accelerator">0</span></div>
                     <div>CS Bonus (if achieved):</div>
-                    <div>$<span id="cs-total">15,000</span></div>
+                    <div>$<span id="cs-total">0</span></div>
                     <div class="font-bold">Total Potential Earnings:</div>
                     <div class="font-bold">$<span id="total-earnings">0</span></div>
                 </div>
@@ -136,20 +136,17 @@
             const acvVariable = ote * 0.3;
             const csVariable = ote * 0.1;
 
-            const commRate = (acvVariable / (ote * 2)) * 100;
-            const accRate = commRate * 1.5;
+            const annualTarget = Number(document.getElementById('annual-target').value.replace(/,/g, "")) || 0;
+            const bcr = ((acvVariable / annualTarget) * 100).toFixed(1);
+            const accRate = (bcr * 1.5).toFixed(1);
 
             // Update Compensation Structure
             document.getElementById('base-salary').textContent = formatDollar(baseSalary);
             document.getElementById('acv-variable').textContent = formatDollar(acvVariable);
             document.getElementById('cs-variable').textContent = formatDollar(csVariable);
-            document.getElementById('comm-rate').textContent = commRate.toFixed(1);
-            document.getElementById('acc-rate').textContent = accRate.toFixed(1);
+            document.getElementById('comm-rate').textContent = bcr;
+            document.getElementById('acc-rate').textContent = accRate;
 
-            // Additional calculations for commissions and totals...
-        }
-
-        updateAll();
-    </script>
-</body>
-</html>
+            // Calculate Quarterly Goals
+            const q2Goal = annualTarget * 0.25;
+            const q3Goal = annualTarget * 0
