@@ -146,10 +146,18 @@
             const ote = Number(document.getElementById('ote').value.replace(/,/g, "")) || 0;
             const baseSalary = ote * 0.6;
             const acvVariable = ote * 0.3;
-            const csBonus = ote * 0.1; // Dynamically calculate CS bonus
+            const csBonus = ote * 0.1;
+
+            // Update Static Fields
+            document.getElementById('base-salary').textContent = formatDollar(baseSalary);
+            document.getElementById('acv-variable').textContent = formatDollar(acvVariable);
+            document.getElementById('cs-variable').textContent = formatDollar(csBonus);
 
             const bcr = ((acvVariable / 500000) * 100).toFixed(1);
             const accRate = (bcr * 1.5).toFixed(1);
+
+            document.getElementById('comm-rate').textContent = bcr;
+            document.getElementById('acc-rate').textContent = accRate;
 
             let totalGoal = 0,
                 totalActual = 0,
