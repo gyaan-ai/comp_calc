@@ -39,47 +39,51 @@
         <!-- Earnings Calculator & ACV Goals Section -->
         <div class="bg-white rounded-lg shadow p-6">
             <h2 class="text-xl font-bold mb-4">Earnings Calculator & ACV Goals</h2>
-
-            <!-- Quarterly ACV Goals -->
             <div class="mt-4">
                 <h3 class="text-lg font-bold mb-2">Quarterly ACV Goals</h3>
-                <div class="grid grid-cols-4 gap-4 text-center font-bold">
+                <div class="grid grid-cols-5 gap-4 text-center font-bold">
                     <div class="center-grid">Quarter</div>
                     <div class="center-grid">Goal</div>
                     <div class="center-grid">Actual</div>
                     <div class="center-grid">Commissions</div>
+                    <div class="center-grid">% of Goal</div>
                 </div>
-                <div class="grid grid-cols-4 gap-4 items-center">
+                <!-- Quarterly Rows -->
+                <div class="grid grid-cols-5 gap-4 items-center">
                     <div class="center-grid">Q1</div>
                     <div class="center-grid">$<span id="q1-goal">100,000</span></div>
                     <div>
                         <input type="text" id="q1-acv" class="w-full border rounded p-2 text-center" placeholder="ACV ($)" oninput="formatAndUpdate('q1-acv')">
                     </div>
                     <div class="center-grid">$<span id="q1-comm">0</span></div>
+                    <div class="center-grid"><span id="q1-percent">0</span>%</div>
                 </div>
-                <div class="grid grid-cols-4 gap-4 items-center">
+                <div class="grid grid-cols-5 gap-4 items-center">
                     <div class="center-grid">Q2</div>
                     <div class="center-grid">$<span id="q2-goal">125,000</span></div>
                     <div>
                         <input type="text" id="q2-acv" class="w-full border rounded p-2 text-center" placeholder="ACV ($)" oninput="formatAndUpdate('q2-acv')">
                     </div>
                     <div class="center-grid">$<span id="q2-comm">0</span></div>
+                    <div class="center-grid"><span id="q2-percent">0</span>%</div>
                 </div>
-                <div class="grid grid-cols-4 gap-4 items-center">
+                <div class="grid grid-cols-5 gap-4 items-center">
                     <div class="center-grid">Q3</div>
                     <div class="center-grid">$<span id="q3-goal">125,000</span></div>
                     <div>
                         <input type="text" id="q3-acv" class="w-full border rounded p-2 text-center" placeholder="ACV ($)" oninput="formatAndUpdate('q3-acv')">
                     </div>
                     <div class="center-grid">$<span id="q3-comm">0</span></div>
+                    <div class="center-grid"><span id="q3-percent">0</span>%</div>
                 </div>
-                <div class="grid grid-cols-4 gap-4 items-center">
+                <div class="grid grid-cols-5 gap-4 items-center">
                     <div class="center-grid">Q4</div>
                     <div class="center-grid">$<span id="q4-goal">150,000</span></div>
                     <div>
                         <input type="text" id="q4-acv" class="w-full border rounded p-2 text-center" placeholder="ACV ($)" oninput="formatAndUpdate('q4-acv')">
                     </div>
                     <div class="center-grid">$<span id="q4-comm">0</span></div>
+                    <div class="center-grid"><span id="q4-percent">0</span>%</div>
                 </div>
             </div>
 
@@ -144,13 +148,33 @@
             document.getElementById('comm-rate').textContent = bcr;
             document.getElementById('acc-rate').textContent = accRate;
 
+            // Calculate Commissions and Percentages
+            const quarters = ['q1', 'q2', 'q3', 'q4'];
+            let totalCommissions = 0;
+
+            quarters.forEach(q => {
+                const goal = Number(document.getElementById(`${q}-goal`).textContent.replace(/,/g, "")) || 0;
+                const actual = Number(document.getElementById(`${q}-acv`).value.replace(/,/g, "")) || 0;
+
+                const baseCommission = Math.min(actual, goal) * (bcr / 100);
+                const acceleratorCommission = Math.max(0, actual - goal) * (accRate / 100);
+                const totalQuarterCommission = baseCommission + acceleratorCommission;
+
+                document.getElementById(`${q}-comm`).textContent = formatDollar(totalQuarterCommission);
+                document.getElementById(`${q}-percent`).textContent = ((actual / goal) * 100).toFixed(1);
+
+                totalCommissions += totalQuarterCommission;
+            });
+
             // NPS Bonus
             const npsBonus = Number(document.getElementById('nps-range').value) || 0;
             document.getElementById('nps-bonus').textContent = formatDollar(npsBonus);
 
             // Earnings Breakdown
-            const totalEarnings = baseSalary + npsBonus; // Extend this with commissions when added
+            const totalEarnings = baseSalary + totalCommissions + csVariable + npsBonus;
             document.getElementById('summary-base-salary').textContent = formatDollar(baseSalary);
+            document.getElementById('acv-base').textContent = formatDollar(totalCommissions);
+            document.getElementById('cs-total').textContent = formatDollar(csVariable);
             document.getElementById('total-earnings').textContent = formatDollar(totalEarnings);
         }
 
