@@ -179,13 +179,16 @@
             document.getElementById('total-comm').textContent = formatDollar(totalBaseCommissions + totalAcceleratorCommissions);
             document.getElementById('total-percent').textContent = totalPercent.toFixed(1);
 
+            const csBonus = 15000;
             const npsBonus = Number(document.getElementById('nps-range').value) || 0;
+
             document.getElementById('nps-bonus').textContent = formatDollar(npsBonus);
 
-            const totalEarnings = baseSalary + totalBaseCommissions + totalAcceleratorCommissions + npsBonus;
+            const totalEarnings = baseSalary + totalBaseCommissions + totalAcceleratorCommissions + csBonus + npsBonus;
             document.getElementById('summary-base-salary').textContent = formatDollar(baseSalary);
             document.getElementById('acv-base').textContent = formatDollar(totalBaseCommissions);
             document.getElementById('acv-accelerator').textContent = formatDollar(totalAcceleratorCommissions);
+            document.getElementById('cs-total').textContent = formatDollar(csBonus);
             document.getElementById('total-earnings').textContent = formatDollar(totalEarnings);
         }
 
