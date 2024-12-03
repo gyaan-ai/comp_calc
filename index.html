@@ -14,10 +14,18 @@
         .center-grid {
             text-align: center;
         }
+        .bold-label {
+            font-weight: bold;
+        }
     </style>
 </head>
 <body class="bg-gray-100 p-6">
     <div class="max-w-4xl mx-auto space-y-6">
+        <!-- Title Section -->
+        <div class="text-center">
+            <h1 class="text-2xl font-bold mb-4">Customer Journey Manager Compensation Calculator</h1>
+        </div>
+
         <!-- Compensation Structure Section -->
         <div class="bg-white rounded-lg shadow p-6 center-content">
             <h2 class="text-xl font-bold mb-4">Compensation Structure</h2>
@@ -26,13 +34,13 @@
                 <input type="text" id="ote" class="w-1/2 border rounded p-2 text-center" value="150,000" oninput="formatAndUpdate('ote')">
             </div>
             <div class="mt-4 grid grid-cols-3 gap-4 text-sm text-gray-600">
-                <div class="center-grid">Base Salary: $<span id="base-salary">90,000</span></div>
-                <div class="center-grid">Annual ACV Variable: $<span id="acv-variable">45,000</span></div>
-                <div class="center-grid">Annual CS Variable: $<span id="cs-variable">15,000</span></div>
+                <div class="center-grid bold-label">Base Salary: $<span id="base-salary">90,000</span></div>
+                <div class="center-grid bold-label">Annual ACV Variable: $<span id="acv-variable">45,000</span></div>
+                <div class="center-grid bold-label">Annual CS Variable: $<span id="cs-variable">15,000</span></div>
             </div>
             <div class="mt-4 grid grid-cols-2 gap-4 text-sm text-gray-600">
-                <div class="text-center">Base Commission Rate (BCR): <span id="comm-rate">9.0</span>%</div>
-                <div class="text-center">Accelerator Rate: <span id="acc-rate">13.5</span>%</div>
+                <div class="text-center bold-label">Base Commission Rate (BCR): <span id="comm-rate">9.0</span>%</div>
+                <div class="text-center bold-label">Accelerator Rate: <span id="acc-rate">13.5</span>%</div>
             </div>
         </div>
 
