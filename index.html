@@ -120,7 +120,7 @@
                     <div>ACV Accelerator Commission:</div>
                     <div>$<span id="acv-accelerator">0</span></div>
                     <div>CS Bonus:</div>
-                    <div>$<span id="cs-total">15,000</span></div>
+                    <div>$<span id="cs-total">0</span></div>
                     <div>NPS Bonus:</div>
                     <div>$<span id="nps-bonus">0</span></div>
                     <div class="font-bold">Total Potential Earnings:</div>
@@ -146,6 +146,7 @@
             const ote = Number(document.getElementById('ote').value.replace(/,/g, "")) || 0;
             const baseSalary = ote * 0.6;
             const acvVariable = ote * 0.3;
+            const csBonus = ote * 0.1; // Dynamically calculate CS bonus
 
             const bcr = ((acvVariable / 500000) * 100).toFixed(1);
             const accRate = (bcr * 1.5).toFixed(1);
@@ -179,7 +180,6 @@
             document.getElementById('total-comm').textContent = formatDollar(totalBaseCommissions + totalAcceleratorCommissions);
             document.getElementById('total-percent').textContent = totalPercent.toFixed(1);
 
-            const csBonus = 15000;
             const npsBonus = Number(document.getElementById('nps-range').value) || 0;
 
             document.getElementById('nps-bonus').textContent = formatDollar(npsBonus);
